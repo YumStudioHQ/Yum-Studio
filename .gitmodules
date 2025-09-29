@@ -1,0 +1,3 @@
+[submodule "YumStudio"]
+	path = YumStudio
+	url = https://github.com/YumStudioHQ/Yum4Godot.git

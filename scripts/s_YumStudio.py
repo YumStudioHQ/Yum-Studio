@@ -174,8 +174,9 @@ def main() -> None:
       shutil.rmtree(repo_dir)
 
     print(f"{Ansi.CYAN}[CLONE]{Ansi.RESET} Cloning repository from {repo_url}")
-    run_command(f"git submodule add {repo_url} {repo_name}")
-
+    run_command(f"git submodule add -f {repo_url} {repo_name}")
+    run_command("git submodule sync --recursive")
+    run_command("git submodule update --init --recursive")
     process_repo(repo_dir)
 
     submodules = get_submodules(repo_dir)
