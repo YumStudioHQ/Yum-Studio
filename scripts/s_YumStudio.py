@@ -162,6 +162,10 @@ def main() -> None:
     ("https://github.com/YumStudioHQ/Yum4Godot.git", "YumStudio")
   ]
 
+  with open(".gitmodules", "+a") as gsubmds:
+    gsubmds.write('')
+    gsubmds.close()
+
   for repo_url, repo_name in deps:
     repo_dir = Path(repo_name)
 
@@ -170,7 +174,7 @@ def main() -> None:
       shutil.rmtree(repo_dir)
 
     print(f"{Ansi.CYAN}[CLONE]{Ansi.RESET} Cloning repository from {repo_url}")
-    run_command(f"git clone --recurse-submodules {repo_url} {repo_name}")
+    run_command(f"git submodule add {repo_url} {repo_name}")
 
     process_repo(repo_dir)
 
