@@ -1,3 +1,14 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+.vscode/
+.vs/
+.idea/
+.editorconfig
+*.DS_Store
+*.tmp
+*.temp
 __pycache__/
 *.pyc
-*.DS_Store
+libraries/
+godot/

@@ -156,10 +156,10 @@ def get_submodules(repo_dir: Path) -> list[Path]:
 
   return submodules
 
-def main() -> None:
+def GetYumStudio() -> None:
   """Main entry point of the program."""
   deps: list[tuple[str, str]] = [
-    ("https://github.com/YumStudioHQ/Yum4Godot.git", "YumStudio")
+    ("https://github.com/YumStudioHQ/Yum4Godot.git", "YumStudioSharp")
   ]
 
   with open(".gitmodules", "+a") as gsubmds:
@@ -192,10 +192,14 @@ def main() -> None:
 
   print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules processed successfully.")
 
-if __name__ == "__main__":
+def main():
   try:
+    print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Installing Godot')
     import YumStudioGetGodot
     YumStudioGetGodot.GetGodot()
   except ImportError as e: 
     print(f'{Ansi.RED}[ERR] Importation error:\n{e}')
+  GetYumStudio()
+
+if __name__ == "__main__":
   main()
