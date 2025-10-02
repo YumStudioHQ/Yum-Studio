@@ -193,12 +193,13 @@ def GetYumStudio() -> None:
   print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules processed successfully.")
 
 def main():
-  try:
-    print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Installing Godot')
-    import YumStudioGetGodot
-    YumStudioGetGodot.GetGodot()
-  except ImportError as e: 
-    print(f'{Ansi.RED}[ERR] Importation error:\n{e}')
+  # Do not ship Godot for now.
+  # try:
+  #   print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Installing Godot')
+  #   import YumStudioGetGodot
+  #   YumStudioGetGodot.GetGodot()
+  # except ImportError as e: 
+  #   print(f'{Ansi.RED}[ERR] Importation error:\n{e}')
   GetYumStudio()
 
 if __name__ == "__main__":
