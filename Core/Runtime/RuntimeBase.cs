@@ -1,6 +1,6 @@
 using Godot;
 
-namespace YumStudio.Core;
+namespace YumStudio.Runtime.Core;
 
 public partial class RuntimeBase : Node
 {
