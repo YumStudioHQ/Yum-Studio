@@ -159,7 +159,8 @@ def get_submodules(repo_dir: Path) -> list[Path]:
 def GetYumStudio() -> None:
   """Main entry point of the program."""
   deps: list[tuple[str, str]] = [
-    ("https://github.com/YumStudioHQ/Yum4Godot.git", "YumStudioSharp")
+    ("https://github.com/YumStudioHQ/Yum4Godot.git", "API/YumStudioSharp"),
+    ("https://github.com/wys-prog/maw.git", "API/cxx/Maw"),
   ]
 
   with open(".gitmodules", "+a") as gsubmds:

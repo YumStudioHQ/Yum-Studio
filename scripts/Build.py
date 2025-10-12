@@ -47,10 +47,12 @@ public static class YumStudioVersion
     print(f"Generated {CS_OUT}")
 
 def main():
-    part = sys.argv[1] if len(sys.argv) > 1 else "patch"
+    part = sys.argv[1] if len(sys.argv) > 1 else "build"
     v = bump(part)
     generate_cs(v)
     print("New version:", f"{v['major']}.{v['minor']}.{v['patch']}+{v['build']}")
+    print("Running")
+    os.system(f'dotnet build')
 
 if __name__ == "__main__":
     main()

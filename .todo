@@ -9,3 +9,4 @@
 [ ] Encryption + Key system support for YSO
 [X] Add, access, idiot stuff
 [ ] Pulsed loop (based on a _Process(double) function?)
+[ ] Local C++ Compilers
