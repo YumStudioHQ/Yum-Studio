@@ -13,7 +13,7 @@ public partial class TaskPipeline : Node
   {
     for (int i = 0; i < actions.Count; i++)
     {
-      if (verbose) Output.Log($"[{i+1}/{actions.Count+1}]: {actions[i].Key}");
+      if (verbose) Output.Info($"[{i+1}/{actions.Count}]: {actions[i].Key}");
       actions[i].Value();
     }
   }

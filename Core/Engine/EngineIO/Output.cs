@@ -42,7 +42,7 @@ public static class Output
 
     foreach (var arg in args)
     {
-      Console.Write(color + arg + Color.Reset + " ");
+      Console.Write($"{Color.Blue}[YumStudio]: {Color.Reset}{color}{arg}{Color.Reset}");
     }
     Console.WriteLine();
   }

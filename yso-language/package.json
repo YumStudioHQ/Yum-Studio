@@ -1,0 +1,25 @@
+{
+  "name": "yumstudio-lang",
+  "displayName": "YumStudio Config Highlighting",
+  "description": "Syntax highlighting for YumStudio configuration files (.ysconf)",
+  "version": "1.0.8",
+  "publisher": "you",
+  "engines": { "vscode": "^1.70.0" },
+  "contributes": {
+    "languages": [
+      {
+        "id": "yumstudio",
+        "aliases": ["YumStudio Config", "yumstudio"],
+        "extensions": [".ysconf", "yso"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "yumstudio",
+        "scopeName": "source.yumstudio",
+        "path": "./syntaxes/yumstudio.tmLanguage.json"
+      }
+    ]
+  }
+}

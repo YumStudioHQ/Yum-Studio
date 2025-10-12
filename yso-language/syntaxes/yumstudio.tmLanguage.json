@@ -1,0 +1,56 @@
+{
+  "scopeName": "source.yumstudio",
+  "patterns": [
+    {
+      "name": "comment.line.number-sign.yumstudio",
+      "match": "^\\s*[;#].*$"
+    },
+    {
+      "begin": "^\\s*\\[",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.section.begin.ini" }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.section.end.ini" }
+      },
+      "name": "entity.name.section.ini",
+      "patterns": [
+        {
+          "match": "(?<=\\[)(project|engine|yum|runtime|compiler|package|yumstudio|assembly)(?=\\])",
+          "name": "entity.name.function.yumstudio"
+        },
+        {
+          "match": "(?<=\\[)[^\\]]+(?=\\])",
+          "name": "entity.name.class.yumstudio"
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.double.yumstudio",
+      "begin": "\"\"\"",
+      "end": "\"\"\""
+    },
+    {
+      "name": "string.quoted.double.yumstudio",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "constant.numeric.yumstudio",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    },
+    {
+      "name": "keyword.operator.assignment.yumstudio",
+      "match": ":"
+    },
+    {
+      "match": "^(?:\\s*)(version|blabla|author|license)(?=\\s*:)",
+      "name": "variable.language.yumstudio"
+    },
+    {
+      "match": "^(?:\\s*)([^:\\n]+)(?=\\s*:)",
+      "name": "variable.parameter.yumstudio"
+    }
+  ]
+}
