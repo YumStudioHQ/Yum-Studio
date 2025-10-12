@@ -11,13 +11,19 @@ config_version=5
 [application]
 
 config/name="YumStudio"
-run/main_scene="uid://ohbcpds6wbqm"
+run/main_scene="uid://b86w2twd23rxl"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [dotnet]
 
 project/assembly_name="YumStudio"
+
+[file_customization]
+
+folder_colors={
+"res://Core/": "pink"
+}
 
 [rendering]
 

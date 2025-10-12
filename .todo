@@ -1,3 +1,5 @@
+# Todo
+
 [ ] Https GET/SET
 [ ] (Https) Update
 [ ] Resource Manager
@@ -6,3 +8,4 @@
 [ ] C++ Assembly Generation
 [ ] Encryption + Key system support for YSO
 [X] Add, access, idiot stuff
+[ ] Pulsed loop (based on a _Process(double) function?)

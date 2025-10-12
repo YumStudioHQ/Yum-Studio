@@ -73,6 +73,16 @@ namespace YumStudio
     }
 
     /// <summary>
+    /// Returns if given parameter key exists as scope
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public bool HasScope(string key)
+    {
+      return Keys.ContainsKey(key);
+    }
+
+    /// <summary>
     /// Save to file (UTF-8) using the serializer (ToString()). Overwrites existing file.
     /// </summary>
     public void Save(string path, string header = "")
