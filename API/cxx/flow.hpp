@@ -28,18 +28,22 @@ namespace YumStudio {
   class Flow : public object {
   private:
     std::shared_ptr<invocable> base;
+    std::string name_;
 
   public:
     inline Flow() {}
-    inline Flow(std::shared_ptr<invocable> &inv) : base(inv) {}
+    inline Flow(std::shared_ptr<invocable> &inv, const std::string &n = "unnamed") : base(inv), name_(n) {}
     
     inline std::shared_ptr<object> activator() const override {
       return std::make_shared<Flow<T>>();
     }
 
-
-    fun(Flow, call, (const T &arg), {
+    inline fun(Flow, call, (const T &arg), {
       ret (*base).invoke({arg});
+    })
+
+    inline fun(Flow, name, (), {
+      ret literal<std::string>(name_);
     })
 
     MAW_DefEmptyTypeInfoCode(Flow, &object().get_type())
