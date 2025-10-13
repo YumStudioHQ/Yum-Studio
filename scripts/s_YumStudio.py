@@ -161,6 +161,8 @@ def GetYumStudio() -> None:
   deps: list[tuple[str, str]] = [
     ("https://github.com/YumStudioHQ/Yum4Godot.git", "API/YumStudioSharp"),
     ("https://github.com/wys-prog/maw.git", "API/cxx/maw"),
+    ("https://github.com/wys-prog/wyfs.git", "API/cxx/native/wyfs"),
+    ("https://github.com/wys-prog/warden.git", "API/cxx/native/warden"),
   ]
 
   with open(".gitmodules", "+a") as gsubmds:
@@ -192,6 +194,12 @@ def GetYumStudio() -> None:
     print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.CYAN} Dependency {repo_name} resolved{Ansi.RESET}")
 
   print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules processed successfully.")
+  print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Updating installed packages')
+  run_command("git submodule foreach git pull origin main")
+  print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules updated.")
+  print(f'Sum up:')
+  for repo_url, repo_name in deps:
+    print(f'- {repo_name} ({Ansi.CYAN}{repo_url}{Ansi.RESET})')
 
 def main():
   GetYumStudio()

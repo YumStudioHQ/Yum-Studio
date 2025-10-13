@@ -17,7 +17,7 @@
 #include <vector>
 
 #define MAW_USES_LANGUAGE_MACROS
-#include "Maw/maw.hpp"
+#include "maw/maw.hpp"
 
 #include "flow.hpp"
 

@@ -16,7 +16,9 @@
 #include <memory>
 
 #define MAW_USES_LANGUAGE_MACROS
-#include "Maw/maw.hpp"
+#include "maw/maw.hpp"
+#define _MAW_BACKEND
+#include "maw/_maw.hpp"
 
 namespace YumStudio {
 #ifndef YUM_STUDIO_CXX_ALREADY_USED_MAW
