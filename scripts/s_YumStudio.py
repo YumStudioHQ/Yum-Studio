@@ -160,7 +160,7 @@ def GetYumStudio() -> None:
   """Main entry point of the program."""
   deps: list[tuple[str, str]] = [
     ("https://github.com/YumStudioHQ/Yum4Godot.git", "API/YumStudioSharp"),
-    ("https://github.com/wys-prog/maw.git", "API/cxx/Maw"),
+    ("https://github.com/wys-prog/maw.git", "API/cxx/maw"),
   ]
 
   with open(".gitmodules", "+a") as gsubmds:
