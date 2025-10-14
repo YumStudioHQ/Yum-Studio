@@ -9,7 +9,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -343,5 +345,31 @@ namespace YumStudio
         return false;
       }
     }
+
+    public static T FromYSObject<T>(YSObject ys, string scope, bool sensitive = false) where T : new()
+    {
+      if (!ys.HasScope(scope))
+        throw new DataException($"Missing scope \"{scope}\"");
+
+      var section = ys[scope];
+      var obj = new T();
+      var type = typeof(T);
+
+      foreach (var kv in section)
+      {
+        var prop = type.GetProperty(
+          kv.Key,
+          BindingFlags.Public | BindingFlags.Instance | (sensitive ? BindingFlags.IgnoreCase : 0)
+        );
+        
+        if (prop == null || !prop.CanWrite) continue;
+
+        object value = Convert.ChangeType(kv.Value, prop.PropertyType);
+        prop.SetValue(obj, value);
+      }
+
+      return obj;
+    }
+
   }
 }

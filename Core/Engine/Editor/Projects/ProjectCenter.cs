@@ -1,14 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using YumStudio.Core.Engine.EngineIO;
-using YumStudio.Core.Engine.Entry;
+using YumStudio.Core.Engine.Cycles;
 
 namespace YumStudio.Core.Engine.Editor.Projects;
 
 [OnEngineReady]
-public class ProjectCenter
+public static class ProjectSection
 {
-  public ProjectCenter()
+  public static readonly Dictionary<string, ProjectFile> Projects = [];
+
+  public static void Init()
   {
     try
     {
@@ -25,7 +28,25 @@ public class ProjectCenter
         var list = projects["projects"];
         foreach (var proj in list)
         {
-          
+          var projname = proj.Key.Trim();
+          var projpath = proj.Value;
+
+          if (!File.Exists(projpath))
+          {
+            Output.Error($"'{projpath}': No such path!");
+            continue;
+          }
+
+          try
+          {
+            // TODO ? Handle projects with the same name
+            Projects[projname] = ProjectFile.FromFile(projpath);
+          }
+          catch (Exception e)
+          {
+            Output.Error($"Error: {e}");
+            continue;
+          }
         }
       }
 
@@ -38,7 +59,7 @@ public class ProjectCenter
     }
     catch (Exception e)
     {
-      Output.Error($"C# Exception at {GetType().FullName}", e.ToString());
+      Output.Error($"C# Exception at {typeof(ProjectSection).FullName}", e.ToString());
     }
   }
 }
