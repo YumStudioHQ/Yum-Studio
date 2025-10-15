@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://dt55x4pdeismb"]
+
+[ext_resource type="Script" uid="uid://bd73vwy88ps77" path="res://Core/Engine/Editor/UI/Pages/ProjectList.cs" id="1_qm021"]
+
+[node name="ProjectList" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qm021")
+
+[node name="ProjectsBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true

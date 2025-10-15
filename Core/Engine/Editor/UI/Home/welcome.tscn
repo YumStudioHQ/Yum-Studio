@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl0iq8xrtoq28"]
+
+[ext_resource type="Script" uid="uid://d3u165n36gvlj" path="res://Core/Engine/Editor/UI/Home/GDWelcome.cs" id="1_ac46f"]
+
+[node name="Home" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ac46f")

@@ -4,16 +4,18 @@ namespace YumStudio.Core.Engine.Cycles;
 
 #region on ready
 
-[AttributeUsage(AttributeTargets.Class)]
-public class OnEngineReadyAttribute : Attribute { }
+public interface ICycleAnyAttribue {}
 
-[AttributeUsage(AttributeTargets.Class)]
-public class OnEditorReadyAttribute : Attribute { }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+public class OnEngineReadyAttribute : Attribute, ICycleAnyAttribue { }
 
-[AttributeUsage(AttributeTargets.Class)]
-public class OnYumStudioReadyAttribute : Attribute { }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+public class OnEditorReadyAttribute : Attribute, ICycleAnyAttribue { }
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+public class OnYumStudioReadyAttribute : Attribute, ICycleAnyAttribue { }
 
 #endregion
 
-[AttributeUsage(AttributeTargets.Class)]
-public class OnEngineShutdownAttribute : Attribute { }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+public class OnEngineShutdownAttribute : Attribute, ICycleAnyAttribue { }

@@ -1,4 +1,5 @@
 using System;
+using Godot;
 
 namespace YumStudio.Core.Engine.EngineIO;
 
@@ -31,6 +32,16 @@ public static class Output
     public const string BrightWhite = "\u001b[97m";
   }
 
+  public static void Write(string s)
+  {
+    Console.Write(s);
+  }
+  
+  public static void WriteLine(string s)
+  {
+    Console.WriteLine(s);
+  }
+
   /// <summary>
   /// Logs one or more messages to the console, optionally with a color.
   /// </summary>
@@ -40,11 +51,7 @@ public static class Output
   {
     if (args == null || args.Length == 0) return;
 
-    foreach (var arg in args)
-    {
-      Console.Write($"{Color.Blue}[YumStudio]: {Color.Reset}{color}{arg}{Color.Reset}");
-    }
-    Console.WriteLine();
+    Write($"{Color.Blue}[YumStudio]: {Color.Reset}{color}{args.Join("")}{Color.Reset}");
   }
 
   /// <summary>
@@ -52,7 +59,7 @@ public static class Output
   /// </summary>
   public static void Error(params string[] args)
   {
-    Log(Color.Red, args);
+    Log(Color.Red, [..args, "\n"]);
   }
 
   /// <summary>
@@ -60,7 +67,20 @@ public static class Output
   /// </summary>
   public static void Info(params string[] args)
   {
-    Log(Color.Cyan, args);
+    Log(Color.Cyan, [.. args, "\n"]);
+  }
+  
+  /// <summary>
+  /// Shortcut for info messages in cyan.
+  /// </summary>
+  public static void WriteInfo(params string[] args)
+  {
+    Log(Color.Cyan, [..args]);
+  }
+
+  public static void Warning(params string[] args)
+  {
+    Log(Color.Yellow, ["Warning: ", ..args]);
   }
 
   /// <summary>

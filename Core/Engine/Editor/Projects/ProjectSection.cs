@@ -7,7 +7,7 @@ using YumStudio.Core.Engine.Cycles;
 namespace YumStudio.Core.Engine.Editor.Projects;
 
 [OnEngineReady]
-public static class ProjectSection
+public class ProjectSection
 {
   public static readonly Dictionary<string, ProjectFile> Projects = [];
 
@@ -16,7 +16,7 @@ public static class ProjectSection
     try
     {
       var projects = YSObject.Parse(Globals.ConfigFile, true);
-      Output.Info($"Loading internal file {Output.Color.Green}{Globals.ConfigFile}");
+      Output.Info($"Loading internal file {Output.Color.Green}{Globals.ConfigFile}{Output.Color.Reset}");
 
       if (!projects.HasScope("projects"))
       {
@@ -39,7 +39,6 @@ public static class ProjectSection
 
           try
           {
-            // TODO ? Handle projects with the same name
             Projects[projname] = ProjectFile.FromFile(projpath);
           }
           catch (Exception e)
