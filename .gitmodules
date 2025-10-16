@@ -10,3 +10,6 @@
 [submodule "API/cxx/native/warden"]
 	path = API/cxx/native/warden
 	url = https://github.com/wys-prog/warden.git
+[submodule "API/YSObject"]
+	path = API/YSObject
+	url = https://github.com/YumStudioHQ/YumStudio-Object.git

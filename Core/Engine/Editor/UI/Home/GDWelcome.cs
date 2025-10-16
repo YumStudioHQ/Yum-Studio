@@ -16,6 +16,6 @@ public partial class Welcome : Control
 {
   public override void _Ready()
   {
-    AddChild(ResourceLoader.Load<PackedScene>("res:///Core/Engine/Editor/UI/Home/welcome.tscn").Instantiate());  
+    AddChild(ResourceLoader.Load<PackedScene>("res://Core/Engine/Editor/UI/Home/welcome.tscn").Instantiate());  
   }
 }

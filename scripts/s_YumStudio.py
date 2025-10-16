@@ -28,16 +28,12 @@ import shutil
 import configparser
 import re
 
-
-class Ansi:
-  """ANSI escape codes for colored terminal output."""
-  RESET = "\033[0m"
-  BOLD = "\033[1m"
-  CYAN = "\033[36m"
-  GREEN = "\033[32m"
-  YELLOW = "\033[33m"
-  RED = "\033[31m"
-
+try:
+  import scripts.specsV2 as specs
+  from scripts.colors import Ansi
+except ImportError:
+    import specsV2 as specs
+    from colors import Ansi
 
 # Fallback dependencies if no requirements.txt exists
 DEFAULT_DEPS = ["requests"]
@@ -137,6 +133,7 @@ def process_repo(repo_dir: Path) -> None:
 
   # Cleanup
   cleanup_repo(repo_dir)
+  print(specs.pretty_specs(f'{repo_dir}', f'{Ansi.CYAN}[SpecsV2]: {Ansi.RESET}'))
 
 
 def get_submodules(repo_dir: Path) -> list[Path]:
@@ -159,11 +156,17 @@ def get_submodules(repo_dir: Path) -> list[Path]:
 def GetYumStudio() -> None:
   """Main entry point of the program."""
   deps: list[tuple[str, str]] = [
-    ("https://github.com/YumStudioHQ/Yum4Godot.git", "API/YumStudioSharp"),
-    ("https://github.com/wys-prog/maw.git", "API/cxx/maw"),
-    ("https://github.com/wys-prog/wyfs.git", "API/cxx/native/wyfs"),
-    ("https://github.com/wys-prog/warden.git", "API/cxx/native/warden"),
+
   ]
+
+  with open(".ys-deps", "r") as ysdeps:
+    for line in ysdeps.readlines():
+      if line.strip().startswith('#'): continue
+      if line.strip() == '': continue
+      nameend = line.find('@')
+      name = line[0:nameend].strip()
+      link = line[nameend+1:].strip()
+      deps.append((name, link))
 
   with open(".gitmodules", "+a") as gsubmds:
     gsubmds.write('')
@@ -203,6 +206,7 @@ def GetYumStudio() -> None:
 
 def main():
   GetYumStudio()
+  print(f'Specs:\n{specs.pretty_specs(".", f'{Ansi.CYAN}[SpecsV2]: {Ansi.RESET}')}')
 
 if __name__ == "__main__":
   main()
