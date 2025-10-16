@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Godot;
 using YumStudio.Core.Engine.EngineIO;
 using YumStudio.Core.UnderlyingSystem;
 
@@ -20,11 +21,12 @@ public static class ProjectManager
 
   private static void CreateProjectFile(string name, string path)
   {
-    YSObject obj = new();
-    obj["project"] = [];
-    obj["project"].Add("name", name);
-    obj["project"].Add("path", path);
-    obj.Save(Path.Join(path, "YumStudio.yso"), "; YumStudio configuration file\n; Prefer using YumStudio.Editor to edit that file.");
+    YSObject obj = YSObject.CreateTemplate<ProjectFile>("project");
+    obj["project"]["name"] = name; // TODO?
+    obj["project"]["path"] = path; // TODO?
+    obj.Save(Path.Join(path, ".ysproj.yso"),
+    "; YumStudio configuration file\n; Prefer using YumStudio.Editor to edit that file.");
+    // TODO register in YumStudioGlobIdkWhat
   }
 
   private static void CreateCSharpProject(string name, string path)

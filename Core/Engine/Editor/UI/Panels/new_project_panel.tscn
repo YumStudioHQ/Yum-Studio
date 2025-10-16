@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://bec0wlxlswi1m"]
+
+[ext_resource type="Script" uid="uid://5uy65ft6f46g" path="res://Core/Engine/Editor/UI/Panels/NewProjectPanel.cs" id="1_jlirq"]
+
+[node name="NewProjectPanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jlirq")
+metadata/_edit_use_anchors_ = true
+
+[node name="LProjectName" type="Label" parent="."]
+layout_mode = 2
+text = "Project Name"
+horizontal_alignment = 1
+
+[node name="LineProjectName" type="LineEdit" parent="."]
+layout_mode = 2
+
+[node name="LProjectPath" type="Label" parent="."]
+layout_mode = 2
+text = "Project Path"
+horizontal_alignment = 1
+
+[node name="LineProjectPath" type="LineEdit" parent="."]
+layout_mode = 2
