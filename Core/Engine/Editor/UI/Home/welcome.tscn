@@ -28,6 +28,7 @@ oversampling_override = 1.0
 title = "New Project"
 initial_position = 1
 size = Vector2i(510, 240)
+visible = false
 
 [node name="NewProjectPanel" type="VBoxContainer" parent="NewProjectWindow"]
 anchors_preset = -1

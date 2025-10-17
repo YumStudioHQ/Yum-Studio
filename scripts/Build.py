@@ -52,7 +52,7 @@ def main(args: list[str] = []):
     generate_cs(v)
     print("New version:", f"{v['major']}.{v['minor']}.{v['patch']}+{v['build']}")
     print("Running")
-    os.system(f'dotnet build')
+    return os.system(f'dotnet build')
 
 if __name__ == "__main__":
     main(sys.argv)
