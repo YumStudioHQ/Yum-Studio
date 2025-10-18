@@ -19,3 +19,8 @@ public class OnYumStudioReadyAttribute : Attribute, ICycleAnyAttribue { }
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class OnEngineShutdownAttribute : Attribute, ICycleAnyAttribue { }
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+public class OnEditorShutdownAttribute : Attribute, ICycleAnyAttribue { }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+public class OnYumStudioShutdownAttribute : Attribute, ICycleAnyAttribue { }

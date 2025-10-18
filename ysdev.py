@@ -284,4 +284,8 @@ def main():
 
 
 if __name__ == "__main__":
+  try:
     main()
+  except KeyboardInterrupt:
+    print(f'{ME}: KeyboardInterrupt.')
+    sys.exit(0)

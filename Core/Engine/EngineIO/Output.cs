@@ -80,7 +80,7 @@ public static class Output
 
   public static void Warning(params string[] args)
   {
-    Log(Color.Yellow, ["Warning: ", ..args]);
+    Log(Color.Yellow, ["Warning: ", ..args, "\n"]);
   }
 
   /// <summary>
@@ -88,7 +88,7 @@ public static class Output
   /// </summary>
   public static void Success(params string[] args)
   {
-    Log(Color.Green, args);
+    Log(Color.Green, ["Success: ", Color.Reset, ..args, "\n"]);
   }
 }
 

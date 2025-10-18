@@ -52,16 +52,18 @@ public partial class EngineEntry : Node
   }
 
   private TabContainer pages;
+  private static readonly BindingFlags Bindings = BindingFlags.Static | BindingFlags.Instance 
+                                                | BindingFlags.Public | BindingFlags.NonPublic;
 
   public override void _Ready()
   {
     pages = GetNode<TabContainer>("Pages");
     Output.WriteLine($"{Output.Color.BrightMagenta}YumStudio — V{Version.YumStudioVersion.Full}{Output.Color.Reset}");
 
-    Run<OnEngineReadyAttribute>("Init", BindingFlags.Instance | BindingFlags.Public);
+    Run<OnEngineReadyAttribute>("InitEngine", Bindings);
 
     Run<OnEditorReadyAttribute>(
-      "Init", BindingFlags.Instance | BindingFlags.Public, restrict: typeof(Node),
+      "InitEditor", Bindings, restrict: typeof(Node),
       onInstanceCreated: (type, instance) =>
       {
         var attr = type.GetCustomAttribute<OnEditorReadyAttribute>();
@@ -70,7 +72,6 @@ public partial class EngineEntry : Node
         {
           node.Name = type.Name;
           pages.AddChild(node);
-
         }
         else
         {
@@ -79,14 +80,14 @@ public partial class EngineEntry : Node
       }
     );
 
-    Run<OnYumStudioReadyAttribute>("Init", BindingFlags.Instance | BindingFlags.Public);
+    Run<OnYumStudioReadyAttribute>("InitYumStudio", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
   }
 
   public override void _ExitTree()
   {
-    Run<OnEngineShutdownAttribute>(
-        "Shutdown",
-        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic
-    );
+    Run<OnYumStudioShutdownAttribute>("ShutdownYumStudio", Bindings);
+    Run<OnEditorShutdownAttribute>("ShutdownEditor", Bindings);
+    Run<OnEngineShutdownAttribute>("ShutdownEngine", Bindings);
+    Output.Info("Shutdown complete. Good bye.");
   }
 }

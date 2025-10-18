@@ -23,12 +23,12 @@ public partial class ProjectList : Control
   
   private void AddProject(ProjectFile project)
   {
-    VBoxContainer panel = new();
-    Label label = new() { Text = $"{project.Name} | {project.Kind} | {project.Path}" };
+    HBoxContainer panel = new();
+    Label label = new() { Text = $"{project.Name} | {project.Path}" };
     Button button = new() { Text = "Edit" };
 
-    panel.AddChild(button);
     panel.AddChild(label);
+    panel.AddChild(button);
     AddChild(panel);
   }
 

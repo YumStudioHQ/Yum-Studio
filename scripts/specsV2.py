@@ -44,27 +44,41 @@ def specsof(path: str) -> dict[str, int]:
   return lines_per_language
 
 def pretty_specs(path: str, prefix: str = '> ') -> str:
-  s = ''
-  specs = specsof(path)
-  largest = 4
+    specs = specsof(path)
+    items = sorted(specs.items(), key=lambda kv: kv[1], reverse=True)
 
-  for key in specs.keys():
-    if len(key) > largest: largest = len(key) + 2
-  
-  total = 0
-  languages = 0
-  
-  for key in specs.keys():
-    languages += 1
-    count = specs[key]
-    total += count
-    s += f'{prefix}{key}{" " * (largest - len(key))}{Ansi.BRIGHT_BLUE}{count}{Ansi.RESET}\n'
-  
-  if languages > 1:
-    s += f'{prefix}{Ansi.BRIGHT_BLUE}{languages}{Ansi.RESET} '
-    s += f'languages\n{prefix}Total:{" " * (largest - 6)}{Ansi.BRIGHT_BLUE}{total}{Ansi.RESET}\n'
-    
-  return s
+    total = sum(count for _, count in items)
+    languages = len(items)
+
+    # column widths
+    lang_width = max(8, max(len(k) for k, _ in items))
+    num_width = max(5, len(str(total)))
+
+    # build header
+    s = f"{prefix}| {'Language':<{lang_width}} | {'Lines':>{num_width}} | {'Percent':>8} |\n"
+    s += f"{prefix}|{'-' * (lang_width + 2)}|{'-' * (num_width + 2)}|{'-' * 10}|\n"
+
+    # table body
+    for key, count in items:
+        percent = (count / total) * 100
+        s += (
+            f"{prefix}| {key:<{lang_width}} "
+            f"| {Ansi.BRIGHT_BLUE}{count:>{num_width}}{Ansi.RESET} "
+            f"| {Ansi.BRIGHT_CYAN}{percent:>7.2f}{Ansi.RESET}% |\n"
+        )
+
+    # footer
+    if languages > 1:
+        s += f"{prefix}|{'-' * (lang_width + 2)}|{'-' * (num_width + 2)}|{'-' * 10}|\n"
+        s += (
+            f"{prefix}| {'Total':<{lang_width}} "
+            f"| {Ansi.BRIGHT_BLUE}{total:>{num_width}}{Ansi.RESET} "
+            f"| {Ansi.BRIGHT_CYAN}{100:>7.2f}{Ansi.RESET}% |\n"
+        )
+
+    return s
+
+
 
 if __name__ == '__main__':
   print(pretty_specs('.'))

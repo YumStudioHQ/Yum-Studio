@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Godot;
 using YumStudio.Core.Engine.EngineIO;
 using YumStudio.Core.UnderlyingSystem;
 
@@ -21,12 +20,13 @@ public static class ProjectManager
 
   private static void CreateProjectFile(string name, string path)
   {
-    YSObject obj = YSObject.CreateTemplate<ProjectFile>("project");
-    obj["project"]["name"] = name; // TODO?
-    obj["project"]["path"] = path; // TODO?
-    obj.Save(Path.Join(path, ".ysproj.yso"),
+    YSObject obj = YSObject.CreateTemplate<ProjectFile>("project", true); // standardize = true will convert names snackcase.
+    obj["project"]["name"] = name;
+    obj["project"]["path"] = path;
+    var proj_path = Path.Join(path, ".ysproj.yso");
+    obj.Save(proj_path,
     "; YumStudio configuration file\n; Prefer using YumStudio.Editor to edit that file.");
-    // TODO register in YumStudioGlobIdkWhat
+    ProjectSection.Projects[name] = new(name, path);
   }
 
   private static void CreateCSharpProject(string name, string path)
@@ -56,6 +56,7 @@ public static class ProjectManager
       new("Copying YumStudio API", () => CopyApi(path)),
       new("Creating project file", () => CreateProjectFile(name, path)),
       new("Creating C# project", () => CreateCSharpProject(name, path)),
+      new("Done", () => Output.Success($"Project created {Output.Color.BrightMagenta}{name}{Output.Color.Reset} at {path}"))
     ]);
   }
 }
