@@ -3,6 +3,23 @@
 import os, sys, yaml
 import datetime
 
+def parse_build_file(path: str) -> dict[str, str]:
+    keys: dict[str, str] = {}
+    
+    with open(path, "r+") as file:
+        key: str = ""
+        for line in file.readlines():
+            if line.strip().startswith(';'): continue
+            endp = line.find(':')
+
+            if endp != -1:
+                key = line[0:endp].strip()
+                val: str = line[endp+1:].strip()
+                keys[key] = val
+            else: keys[key] += line
+        file.close()
+    return keys
+
 VERSION_FILE = "version.yml"
 CS_OUT = "Version/YumVersion.cs"
 
@@ -46,13 +63,19 @@ public static class YumStudioVersion
         f.write(content.strip() + "\n")
     print(f"Generated {CS_OUT}")
 
-def main(args: list[str] = []):
+def main(args: list[str] = []) -> int:
     part = args[1] if len(args) > 1 else "build"
     v = bump(part)
     generate_cs(v)
     print("New version:", f"{v['major']}.{v['minor']}.{v['patch']}+{v['build']}")
-    print("Running")
-    return os.system(f'dotnet build')
+
+    tasks = parse_build_file("build/tasks.txt")
+    for task in tasks.keys():
+        print(f'Task: {task}')
+        e = os.system(tasks[task])
+        if e != 0: return e
+    
+    return 0
 
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main(sys.argv))

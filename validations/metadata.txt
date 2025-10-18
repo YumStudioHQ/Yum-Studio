@@ -1,0 +1,2 @@
+; Note: Given Godot path MAY BE invalid.
+godot: /Applications/Godot Mono.app/Contents/MacOS/Godot
