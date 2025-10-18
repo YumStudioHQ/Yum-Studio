@@ -226,7 +226,7 @@ def cmd_build(_args: list[str]):
 def cmd_specs(_args: list[str]):
     try:
       import scripts.specsV2 as specs
-      specs.pretty_specs("./", f'{ME}: > ')
+      print(specs.pretty_specs("./", f'{ME}: > '))
     except ImportError:
         print(f"{Ansi.BRIGHT_RED}{ME}: scripts.specsV2 not found. Try 'install'.{Ansi.RESET}")
 
