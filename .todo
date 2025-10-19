@@ -1,5 +1,8 @@
 # Todo
 
+## Uncategorized
+- [ ] Liscences
+
 ## Next / High Priority
 - [ ] Enable HTTPS support
 - [ ] Add automated Git integration (Auto-Git)
@@ -16,6 +19,10 @@
 - [ ] Add assembly reflection and type metadata
 - [ ] Implement Lua assembly generation
 - [ ] Implement C++ assembly generation
+
+## YumAssembly
+- [ ] Each language has it own way to load Assembly?
+- [ ] ...
 
 ## Backlog / Ideas
 - [ ] Design Maw.System programming language
