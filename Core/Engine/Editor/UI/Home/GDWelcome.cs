@@ -29,6 +29,7 @@ public partial class GDWelcome : Control
     var node = GetNode<NewProjectPanel>("NewProjectWindow/NewProjectPanel");
     // TODO: Errors?
     ProjectManager.CreateProject(node.ProjectName(), node.ProjectPath()).Fire();
+    newProjectWindow.Visible = false;
   }
 }
 

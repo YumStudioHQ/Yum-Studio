@@ -19,8 +19,8 @@ public class ProjectSection
   {
     try
     {
-      var projects = YSObject.Parse(Globals.ConfigFile, true);
-      Output.Info($"Loading internal file {Output.Color.Green}{Globals.ConfigFile}{Output.Color.Reset}");
+      var projects = YSObject.Parse(YumStudioEngine.ConfigFile, true);
+      Output.Info($"Loading internal file {Output.Color.Green}{YumStudioEngine.ConfigFile}{Output.Color.Reset}");
 
       if (!projects.HasScope(PROJECT_SECTION))
       {
@@ -54,13 +54,13 @@ public class ProjectSection
         }
       }
 
-      projects.Save(Globals.ConfigFile, Globals.ConfigFileHeader);
+      projects.Save(YumStudioEngine.ConfigFile, YumStudioEngine.ConfigFileHeader);
       Output.Log(projects.ToString());
     }
     catch (FileNotFoundException)
     {
-      Output.Info($"Creating file {Output.Color.Green}{Globals.ConfigFile}");
-      new YSObject().Save(Globals.ConfigFile, Globals.ConfigFileHeader);
+      Output.Info($"Creating file {Output.Color.Green}{YumStudioEngine.ConfigFile}");
+      new YSObject().Save(YumStudioEngine.ConfigFile, YumStudioEngine.ConfigFileHeader);
     }
     catch (Exception e)
     {
@@ -70,13 +70,13 @@ public class ProjectSection
 
   public static void ShutdownYumStudio()
   {
-    var glob = YSObject.Parse(Globals.ConfigFile, true);
+    var glob = YSObject.Parse(YumStudioEngine.ConfigFile, true);
     if (!glob.HasScope(PROJECT_SECTION)) glob[PROJECT_SECTION] = [];
     foreach (var project in Projects)
     {
       glob[PROJECT_SECTION][project.Value.Name] = Path.Combine(project.Value.Path, ".ysproj.yso");
       Output.Log(glob.ToString());
     }
-    glob.Save(Globals.ConfigFile, Globals.ConfigFileHeader);
+    glob.Save(YumStudioEngine.ConfigFile, YumStudioEngine.ConfigFileHeader);
   }
 }

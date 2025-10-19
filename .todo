@@ -2,6 +2,9 @@
 
 ## Uncategorized
 - [ ] Liscences
+- [ ] 3D-Simple Mesh Editor
+- [ ] Implement user-defined/APIs/.../ EditorViewports dynamically from an Assembly?
+- [ ] Editor API
 
 ## Next / High Priority
 - [ ] Enable HTTPS support
@@ -12,7 +15,12 @@
 
 ## Editor
 - [ ] Implement Project Editor
+- [ ] FileSystemExplorer
+- [ ] Reflection Attributes and Dynamic Loading
+- [ ] Extern Windows Loading? (In C# + C# Assembly + Godot Assembly Sharing)
 - [ ] Implement Resource Manager (UI + integration)
+- [ ] Reload viewports setup (in .ys-editor.yso)
+- [ ] Load Assemblies and also add them together
 
 ## Assembly
 - [ ] Implement cross-language assembly glue (Lua ↔ C++ ↔ C#)

@@ -16,7 +16,8 @@ EXTENSION = {
   'HTML': ['html'],
   'JavaScript': ['js'],
   'YumStudio Object': ['yso', 'ysobject'],
-  'Lua': ['lua']
+  'Lua': ['lua'],
+  'MarkDown': ['md', 'todo']
 }
 
 EXCLUDE = ['.venv', '.godot', '.vs', '.vscode', '.idea']

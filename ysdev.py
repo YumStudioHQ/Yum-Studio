@@ -44,19 +44,20 @@ class Ansi:
   BRIGHT_MAGENTA = "\033[95m"
   BRIGHT_CYAN = "\033[96m"
   BRIGHT_WHITE = "\033[97m"
+
 ME = f"{Ansi.BRIGHT_MAGENTA}[YumStudio-Devs]{Ansi.RESET}"
 
 # ------------------------------------------------
 # Helpers
 # ------------------------------------------------
 def run(cmd: list[str], cwd: str|None=None):
-    """Run a subprocess with live output."""
-    try:
-        subprocess.run(cmd, cwd=cwd, check=True)
-        return True
-    except subprocess.CalledProcessError:
-        print(f"{Ansi.BRIGHT_RED}{ME}: Command failed — {' '.join(cmd)}{Ansi.RESET}")
-        return False
+  """Run a subprocess with live output."""
+  try:
+    subprocess.run(cmd, cwd=cwd, check=True)
+    return True
+  except subprocess.CalledProcessError:
+    print(f"{Ansi.BRIGHT_RED}{ME}: Command failed — {' '.join(cmd)}{Ansi.RESET}")
+    return False
 
 def cleanup_repo(repo_dir: Path) -> None:
   """Remove virtual environment and temporary files."""
@@ -142,145 +143,182 @@ def process_repo(repo_dir: Path) -> None:
   cleanup_repo(repo_dir)
 
 def ensure_repo():
-    """Clone Yum-Studio if missing."""
-    if REPO_DIR.exists():
-        print(f"{Ansi.BRIGHT_YELLOW}{ME}: Repo already exists, skipping clone.{Ansi.RESET}")
-        return True
-
-    print(f"{ME}: Cloning YumStudio from GitHub...")
-    return run(["git", "clone", REPO_URL])
+  """Clone Yum-Studio if missing."""
+  if REPO_DIR.exists():
+    print(f"{Ansi.BRIGHT_YELLOW}{ME}: Repo already exists, skipping clone.{Ansi.RESET}")
+    return True
+  
+  print(f"{ME}: Cloning YumStudio from GitHub...")
+  return run(["git", "clone", REPO_URL])
 
 
 def copy_repo_contents():
-    """Copy all files from Yum-Studio/* into current directory."""
-    if not REPO_DIR.exists():
-        print(f"{Ansi.BRIGHT_RED}{ME}: Repo not found, cannot copy files.{Ansi.RESET}")
-        return False
+  """Copy all files from Yum-Studio/* into current directory."""
+  if not REPO_DIR.exists():
+    print(f"{Ansi.BRIGHT_RED}{ME}: Repo not found, cannot copy files.{Ansi.RESET}")
+    return False
 
-    print(f"{ME}: Copying YumStudio files to current directory...")
+  print(f"{ME}: Copying YumStudio files to current directory...")
 
-    for item in REPO_DIR.iterdir():
-        dest = Path(".") / item.name
+  for item in REPO_DIR.iterdir():
+    dest = Path(".") / item.name
 
-        # Skip .git and existing repo folder
-        if item.name == ".git":
-            continue
+    # Skip .git and existing repo folder
+    if item.name == ".git":
+      continue
 
-        # If destination exists, remove it first
-        if dest.exists():
-            if dest.is_dir():
-                shutil.rmtree(dest)
-            else:
-                dest.unlink()
+    # If destination exists, remove it first
+    if dest.exists():
+      if dest.is_dir():
+        shutil.rmtree(dest)
+      else:
+        dest.unlink()
 
-        # Copy folder or file
-        if item.is_dir():
-            shutil.copytree(item, dest)
-        else:
-            shutil.copy2(item, dest)
+    # Copy folder or file
+    if item.is_dir():
+      shutil.copytree(item, dest)
+    else:
+      shutil.copy2(item, dest)
 
-    print(f"{Ansi.BRIGHT_GREEN}{ME}: Files copied successfully!{Ansi.RESET}")
-    return True
+  print(f"{Ansi.BRIGHT_GREEN}{ME}: Files copied successfully!{Ansi.RESET}")
+  return True
 
 
 def pull_repo():
-    """Update the repo if it exists."""
-    if not REPO_DIR.exists():
-        print(f"{Ansi.BRIGHT_YELLOW}{ME}: Repo not found. Run 'install' first.{Ansi.RESET}")
-        return False
+  """Update the repo if it exists."""
+  if not REPO_DIR.exists():
+    print(f"{Ansi.BRIGHT_YELLOW}{ME}: Repo not found. Run 'install' first.{Ansi.RESET}")
+    return False
 
 
-    return True
+  return True
 
 
 # ------------------------------------------------
 # Commands
 # ------------------------------------------------
 def cmd_install(_args: list[str]):
-    if ensure_repo():
-        copy_repo_contents()
-        print(f"{Ansi.BRIGHT_GREEN}{ME}: YumStudio installed successfully!{Ansi.RESET}")
-        run(['git', 'init'])
-        run(['git', 'branch', '-m', 'main'])
-        print(f'{Ansi.BRIGHT_YELLOW}{ME}{Ansi.RESET}: Updating YumStudio...')
-        cmd_update(_args)
-    else:
-        print(f"{Ansi.BRIGHT_RED}{ME}: Installation failed!{Ansi.RESET}")
+  if ensure_repo():
+    copy_repo_contents()
+    print(f"{Ansi.BRIGHT_GREEN}{ME}: YumStudio installed successfully!{Ansi.RESET}")
+    run(['git', 'init'])
+    run(['git', 'branch', '-m', 'main'])
+    print(f'{Ansi.BRIGHT_YELLOW}{ME}{Ansi.RESET}: Updating YumStudio...')
+    cmd_update(_args)
+  else:
+    print(f"{Ansi.BRIGHT_RED}{ME}: Installation failed!{Ansi.RESET}")
 
 
 def cmd_update(_args: list[str]):
-    try:
-      import scripts.s_YumStudio as YS
-      YS.main()
-    except ImportError:
-        print(f"{Ansi.BRIGHT_RED}{ME}: scripts.s_YumStudio not found. Try 'install'.{Ansi.RESET}")
+  try:
+    import scripts.s_YumStudio as YS
+    YS.main()
+  except ImportError:
+    print(f"{Ansi.BRIGHT_RED}{ME}: scripts.s_YumStudio not found. Try 'install'.{Ansi.RESET}")
 
 def cmd_build(_args: list[str]):
-    try:
-      import scripts.Build as build
-      build.main()
-    except ImportError:
-        print(f"{Ansi.BRIGHT_RED}{ME}: scripts.Build not found. Try 'install'.{Ansi.RESET}")
+  try:
+    import scripts.Build as build
+    build.main()
+  except ImportError:
+    print(f"{Ansi.BRIGHT_RED}{ME}: scripts.Build not found. Try 'install'.{Ansi.RESET}")
 
 
 def cmd_specs(_args: list[str]):
-    try:
-      import scripts.specsV2 as specs
-      print(specs.pretty_specs("./", f'{ME}: > '))
-    except ImportError:
-        print(f"{Ansi.BRIGHT_RED}{ME}: scripts.specsV2 not found. Try 'install'.{Ansi.RESET}")
+  try:
+    import scripts.specsV2 as specs
+    print(specs.pretty_specs("./", f'{ME}: > '))
+  except ImportError:
+    print(f"{Ansi.BRIGHT_RED}{ME}: scripts.specsV2 not found. Try 'install'.{Ansi.RESET}")
 
 def cmd_validate(_args: list[str]):
-    """Run all validation scripts (validations/v_*.py)."""
-    validations_dir = Path("validations")
+  """Run all validation scripts (validations/v_*.py)."""
+  validations_dir = Path("validations")
 
-    if not validations_dir.exists():
-        print(f"{Ansi.BRIGHT_RED}{ME}: No 'validations' directory found!{Ansi.RESET}")
+  if not validations_dir.exists():
+    print(f"{Ansi.BRIGHT_RED}{ME}: No 'validations' directory found!{Ansi.RESET}")
+    return
+
+  scripts = sorted(validations_dir.glob("v_*.py"))
+  if not scripts:
+    print(f"{Ansi.BRIGHT_YELLOW}{ME}: No validation scripts found in {validations_dir}{Ansi.RESET}")
+    return
+
+  print(f"{Ansi.BRIGHT_CYAN}{ME}: Starting validations...{Ansi.RESET}")
+
+  for script_path in scripts:
+    # Extract readable name
+    name = script_path.stem.replace("v_", "")
+    print(f"{Ansi.BRIGHT_BLUE}[VAL]{Ansi.RESET} Running validation: {Ansi.BOLD}{name}{Ansi.RESET}")
+    result = run(["python3", str(script_path)])
+
+    if result:
+      print(f"{Ansi.BRIGHT_GREEN}[OK]{Ansi.RESET} Validation passed: {name}")
+    else:
+      print(f"{Ansi.BRIGHT_RED}[FAIL]{Ansi.RESET} Validation failed: {name}")
+
+  print(f"{Ansi.BRIGHT_MAGENTA}{ME}: All validations finished!{Ansi.RESET}")
+
+def cmd_update_upstream(_args: list[str]):
+  sys.exit(run(["git", "pull", f'{REPO_URL}', "main"]))
+
+def cmd_force_update(_args: list[str]):
+    """Completely removes Yum-Studio and reinstalls it fresh from GitHub."""
+    confirm = input(f"{Ansi.BRIGHT_RED}{ME}: This will DELETE Yum-Studio and reinstall it. Continue? (y/N) {Ansi.RESET}")
+    if confirm.lower().strip() != "y":
+        print(f"{Ansi.YELLOW}{ME}: Aborted.{Ansi.RESET}")
         return
 
-    scripts = sorted(validations_dir.glob("v_*.py"))
-    if not scripts:
-        print(f"{Ansi.BRIGHT_YELLOW}{ME}: No validation scripts found in {validations_dir}{Ansi.RESET}")
-        return
+    print(f"{Ansi.BRIGHT_RED}{ME}: Nuking everything...{Ansi.RESET}")
 
-    print(f"{Ansi.BRIGHT_CYAN}{ME}: Starting validations...{Ansi.RESET}")
+    if REPO_DIR.exists():
+        shutil.rmtree(REPO_DIR, ignore_errors=True)
+        print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed {REPO_DIR}")
 
-    for script_path in scripts:
-        # Extract readable name
-        name = script_path.stem.replace("v_", "")
-        print(f"{Ansi.BRIGHT_BLUE}[VAL]{Ansi.RESET} Running validation: {Ansi.BOLD}{name}{Ansi.RESET}")
+    for path in Path(".").iterdir():
+        if path.name in {".git", "ysdev.py"}:
+            continue
+        if path.is_dir() and path.name.startswith("Yum") or path.name == "scripts":
+            shutil.rmtree(path, ignore_errors=True)
+            print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed dir {path}")
+        elif path.name.startswith("Yum") and path.suffix in {".py", ".md"}:
+            path.unlink(missing_ok=True)
+            print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed file {path}")
 
-        result = run(["python3", str(script_path)])
-        if result:
-            print(f"{Ansi.BRIGHT_GREEN}[OK]{Ansi.RESET} Validation passed: {name}")
-        else:
-            print(f"{Ansi.BRIGHT_RED}[FAIL]{Ansi.RESET} Validation failed: {name}")
+    print(f"{Ansi.BRIGHT_MAGENTA}{ME}: Reinstalling Yum-Studio from scratch...{Ansi.RESET}")
+    if ensure_repo():
+        copy_repo_contents()
+        print(f"{Ansi.BRIGHT_GREEN}{ME}: Fresh install complete!{Ansi.RESET}")
+        cmd_update(_args)
+    else:
+        print(f"{Ansi.BRIGHT_RED}{ME}: Force update failed!{Ansi.RESET}")
 
-    print(f"{Ansi.BRIGHT_MAGENTA}{ME}: All validations finished!{Ansi.RESET}")
 
 # ------------------------------------------------
 # Dispatcher
 # ------------------------------------------------
 COMMANDS = { # type: ignore
-    "install": cmd_install,
-    "update": cmd_update,
-    "build": cmd_build,
-    "specs": cmd_specs,
-    "test": cmd_validate,
+  "install": cmd_install,
+  "update": cmd_update,
+  "build": cmd_build,
+  "specs": cmd_specs,
+  "test": cmd_validate,
+  "pull": cmd_update_upstream,
+  "force-update": cmd_force_update,
 }
 
 def main():
-    if len(sys.argv) < 2:
-        print(f"{Ansi.BRIGHT_YELLOW}{ME}: No command given! Try 'install' or 'build'.{Ansi.RESET}")
-        return
+  if len(sys.argv) < 2:
+    print(f"{Ansi.BRIGHT_YELLOW}{ME}: No command given! Try 'install' or 'build'.{Ansi.RESET}")
+    return
 
-    cmd = sys.argv[1].lower().strip()
-    func = COMMANDS.get(cmd) # type: ignore
-    if func:
-        func(sys.argv[2:])
-    else:
-        print(f"{Ansi.BRIGHT_RED}{ME}: Unknown command '{cmd}'!{Ansi.RESET}")
-        print("Available commands:", ", ".join(COMMANDS.keys())) # type: ignore
+  cmd = sys.argv[1].lower().strip()
+  func = COMMANDS.get(cmd) # type: ignore
+  if func:
+    func(sys.argv[2:])
+  else:
+    print(f"{Ansi.BRIGHT_RED}{ME}: Unknown command '{cmd}'!{Ansi.RESET}")
+    print("Available commands:", ", ".join(COMMANDS.keys())) # type: ignore
 
 
 if __name__ == "__main__":

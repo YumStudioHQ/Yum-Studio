@@ -15,12 +15,7 @@ public partial class EngineEntry : Node
         Type restrict = null,
         Action<Type, object> onInstanceCreated = null) where TAttribute : Attribute
   {
-    var types = AppDomain.CurrentDomain.GetAssemblies()
-        .SelectMany(a =>
-        {
-          try { return a.GetTypes(); }
-          catch (ReflectionTypeLoadException ex) { return ex.Types.Where(t => t != null)!; }
-        })
+    var types = YumStudioEngine.GetEngineAssembly()
         .Where(t => t.GetCustomAttribute<TAttribute>() != null)
         .Where(t => restrict == null || t.IsAssignableTo(restrict))
         .ToList();
