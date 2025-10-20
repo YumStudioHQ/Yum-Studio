@@ -14,13 +14,14 @@
 - [ ] Implement C# assembly toolchain (compiler, runtime attributes)
 
 ## Editor
-- [ ] Implement Project Editor
-- [ ] FileSystemExplorer
-- [ ] Reflection Attributes and Dynamic Loading
-- [ ] Extern Windows Loading? (In C# + C# Assembly + Godot Assembly Sharing)
+- [X] Implement Project Editor
+- [X] FileSystemExplorer
+- [X] Reflection Attributes and Dynamic Loading
+- [X] Extern Windows Loading? (In C# + C# Assembly + Godot Assembly Sharing)
 - [ ] Implement Resource Manager (UI + integration)
 - [ ] Reload viewports setup (in .ys-editor.yso)
 - [ ] Load Assemblies and also add them together
+- [ ] ProjectEditorView API (Toolbar + Window + Maybe more (other UI panels))
 
 ## Assembly
 - [ ] Implement cross-language assembly glue (Lua ↔ C++ ↔ C#)
@@ -36,6 +37,9 @@
 - [ ] Design Maw.System programming language
 - [ ] Add local Git update integration for YumStudioDevelopers
 - [ ] Review/clarify remaining vague items
+
+## Not really important
+- [ ] Install Godot/.NET/GCC regarding the platform with ysdev
 
 ## Done
 - [x] Add/access simple user features

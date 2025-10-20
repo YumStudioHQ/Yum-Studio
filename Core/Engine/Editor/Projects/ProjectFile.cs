@@ -6,7 +6,7 @@ public class ProjectFile
 {
   public string Name { get; set; } = "";
   public string Path { get; set; } = "";
-  public string Kind { get; set; } = "";
+  public string Kind { get; set; } = "UNKNOWN";
 
   public ProjectFile() { }
 

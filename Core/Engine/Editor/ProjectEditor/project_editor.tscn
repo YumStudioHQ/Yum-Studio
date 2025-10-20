@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c6njvl5xm63vf"]
 
-[ext_resource type="Script" uid="uid://b4kfgtcbybhjb" path="res://Core/Engine/Editor/ProjectEditor/ProjectEditor.cs" id="1_7qfgu"]
+[ext_resource type="Script" uid="uid://b4kfgtcbybhjb" path="res://Core/Engine/Editor/ProjectEditor/ProjectEditorView.cs" id="1_7qfgu"]
 
 [node name="ProjectEditor" type="Control"]
 layout_mode = 3

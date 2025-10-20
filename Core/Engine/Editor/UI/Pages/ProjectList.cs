@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using YumStudio.Core.Engine.Cycles;
 using YumStudio.Core.Engine.Editor.Projects;
@@ -24,12 +25,12 @@ public partial class ProjectList : Control
   private void AddProject(ProjectFile project)
   {
     HBoxContainer panel = new();
-    Label label = new() { Text = $"{project.Name} | {project.Path}" };
+    Label label = new() { Text = $"{project.Name} | {(string.IsNullOrEmpty(project.Kind) ? "UNKOWN" : project.Kind)} | {project.Path}" };
     Button button = new() { Text = "Edit" };
 
     panel.AddChild(label);
     panel.AddChild(button);
-    AddChild(panel);
+    projectsBox.AddChild(panel);
   }
 
   public override void _Ready()

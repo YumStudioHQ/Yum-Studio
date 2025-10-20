@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.IO;
 
 namespace YumStudio.Core.Engine.Editor.UI.Panels;
 
@@ -16,5 +17,5 @@ public partial class NewProjectPanel : Control
   }
 
   public string ProjectName() => lineProjectName.Text;
-  public string ProjectPath() => lineProjectPath.Text;
+  public string ProjectPath() => Path.GetFullPath(lineProjectPath.Text);
 }

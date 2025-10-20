@@ -7,9 +7,10 @@ using YumStudio.Core.Engine.Cycles;
 
 namespace YumStudio.Core.Engine.Editor.ProjectEditor.Views;
 
-[OnEditorReady]
+[OnEngineReady]
 public partial class FileExplorerView : EditorViewport
 {
+#region inner classes
   public partial class FileEntry : TextureButton
   {
     public string Path { get; private set; }
@@ -28,18 +29,34 @@ public partial class FileExplorerView : EditorViewport
 
   public partial class DirectoryEntry : TextureButton
   {
-    public string Path { get; private set; }
+    public string Path { get; protected set; }
+    protected FileExplorerView view;
 
-    protected virtual void OnButtonPressed() { }
+    protected virtual void OnButtonPressed()
+     => view.Open(Path);
+    
 
     private void Init()
+     => Connect("pressed", new Callable(this, nameof(OnButtonPressed)));
+    
+    public DirectoryEntry(FileExplorerView explorerView, string path)
     {
-      Connect("pressed", new Callable(this, nameof(OnButtonPressed)));
+      view = explorerView;
+      Path = path;
+      Init();
     }
-
-    public DirectoryEntry(string path) { Path = path; Init(); }
+    
     public DirectoryEntry() { Init(); }
   }
+
+  public partial class ParentDirectoryEntry : DirectoryEntry
+  {
+    protected override void OnButtonPressed()
+     => view.Open(Directory.GetParent(Path).FullName);
+
+    public ParentDirectoryEntry(FileExplorerView v, string path) { Path = path; view = v; }
+  }
+#endregion
 
   // TODO?: Create instance version (copy)
   private static readonly Dictionary<string, Type> FileHandlers = []; 
@@ -53,15 +70,30 @@ public partial class FileExplorerView : EditorViewport
     AddChild((FileEntry)Activator.CreateInstance(type, [path]));
   }
 
-  public override void _Ready()
+  private void RenderDirectory()
   {
+    foreach (var child in container.GetChildren()) child.QueueFree();
+
     var dirs = Directory.GetDirectories(ProjectPath);
     var files = Directory.GetFiles(ProjectPath);
 
-    foreach (var file in files) AddFile(file);
+    AddChild(new ParentDirectoryEntry(this, ProjectPath));
 
+    foreach (var file in files) AddFile(file);
+    foreach (var dir in dirs) AddChild(new DirectoryEntry(this, dir));
+  }
+
+  public override void _Ready()
+  {
     AddChild(scroll);
     scroll.AddChild(container);
+    RenderDirectory();
+  }
+
+  public void Open(string path)
+  {
+    ProjectPath = path;
+    RenderDirectory();
   }
 
   public static void InitEditor()
@@ -75,4 +107,7 @@ public partial class FileExplorerView : EditorViewport
     foreach (var fileType in fileTypes)
       FileHandlers[((FileEntry)Activator.CreateInstance(fileType)).GetExtension()] = fileType;
   }
+
+  public FileExplorerView() {}
+  public FileExplorerView(string path) { Open(path); }
 }
