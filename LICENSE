@@ -1,0 +1,43 @@
+# YumStudio Open License (YOL-1.0)
+
+Copyright (c) 2025 YumStudioHQ
+
+This software (the "Engine", also known as YumStudio) is provided free of charge 
+under the following terms:
+
+1. **Open Source**
+   - The source code of YumStudio may be used, studied, and modified freely.
+
+2. **Non-Commercial Distribution**
+   - You may NOT sell, sublicense, or otherwise commercially redistribute YumStudio 
+     or modified versions of it.
+   - YumStudio must always be provided free of charge.
+
+3. **Commercial Projects**
+   - Games or applications developed *using* YumStudio may be sold or monetized freely.
+
+4. **Attribution**
+   - All public projects using YumStudio (except finished games) must include 
+     the following credit visibly in documentation or the “About” section:
+
+       “Powered by YumStudio — © YumStudioHQ”
+
+   - You must not remove or alter any copyright notices.
+
+5. **Third-Party Components**
+   - YumStudio is based on the Godot Engine (MIT License).
+   - YumStudio includes additional assets, icons, and tools licensed from third parties. 
+     See the “Credits and Licenses” section below.
+
+6. **No Warranty**
+   - YumStudio is provided “as is,” without warranty of any kind.
+
+---
+
+## Godot Game Engine (YumStudio's base) 
+- [License](./licenses/godot/LICENSE.md)
+- [Authors](./licenses/godot/AUTHORS.md)
+
+## Third-party
+Thanks also to a *lot* of people, that (in)directly helped the project!
+- [Them!](./CREDITS.md)

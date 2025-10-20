@@ -22,6 +22,7 @@
 - [ ] Reload viewports setup (in .ys-editor.yso)
 - [ ] Load Assemblies and also add them together
 - [ ] ProjectEditorView API (Toolbar + Window + Maybe more (other UI panels))
+- [ ] Add file names + texture + ...
 
 ## Assembly
 - [ ] Implement cross-language assembly glue (Lua ↔ C++ ↔ C#)

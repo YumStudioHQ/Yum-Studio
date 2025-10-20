@@ -1,8 +1,14 @@
-# Yum-Studio
+# YumStudio
 
-Pipeline & Godot based engine.
+YumStudio is a meta-game engine, based on [Godot](http://godotengine.org/). 
 
-# IMPORTANT: YumStudio isn't **released** at all. Still working on.
+## Important: The project is still in developement.
+
+# Other
+
+- [License](./LICENSE)
+- [Authors](./AUTHORS.md)
+- [Credits](./CREDITS.md)
 
 ## YumStudio-Developers — CLI tool for developers
 

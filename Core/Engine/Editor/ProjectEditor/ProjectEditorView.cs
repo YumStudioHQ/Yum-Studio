@@ -52,7 +52,7 @@ public partial class ProjectEditorView : Control
     foreach (var type in types)
     {
       var instance = (EditorViewport)Activator.CreateInstance(type, [projectPath]);
-      AddChild(instance);
+      viewports.AddChild(instance);
       Output.Info($"Editor viewport loaded: {type.FullName}");
     }
   }
@@ -64,6 +64,8 @@ public partial class ProjectEditorView : Control
       Size = new(1200, 1000),
       Title = $"YumStudio — {projname} • {projpath}",
     };
+
+    win.Connect("close_requested", Callable.From(win.QueueFree));
 
     var editor = new ProjectEditorView();
     editor.Open(projpath);

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Godot;
 using YumStudio.Core.Engine.Cycles;
+using YumStudio.Core.Engine.EngineIO;
 
 namespace YumStudio.Core.Engine.Editor.ProjectEditor.Views;
 
@@ -67,7 +68,8 @@ public partial class FileExplorerView : EditorViewport
   private void AddFile(string path)
   {
     var type = FileHandlers.GetValueOrDefault(Path.GetExtension(path), typeof(FileEntry));
-    AddChild((FileEntry)Activator.CreateInstance(type, [path]));
+    Output.Info(type.FullName);
+    container.AddChild((FileEntry)Activator.CreateInstance(type, [path]));
   }
 
   private void RenderDirectory()
@@ -85,6 +87,12 @@ public partial class FileExplorerView : EditorViewport
 
   public override void _Ready()
   {
+    scroll.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+    scroll.SizeFlagsVertical = SizeFlags.ExpandFill;
+    container.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+    container.SizeFlagsVertical = SizeFlags.ExpandFill;
+    container.Columns = 8;
+
     AddChild(scroll);
     scroll.AddChild(container);
     RenderDirectory();
@@ -96,16 +104,17 @@ public partial class FileExplorerView : EditorViewport
     RenderDirectory();
   }
 
-  public static void InitEditor()
+  public static void InitEngine()
   {
     var assembly = YumStudioEngine.GetEngineAssembly();
     var fileTypes = assembly
                    .Where(t => t.IsAssignableTo(typeof(FileEntry)))
-                   .Where(t => t.IsClass && !t.IsAbstract && !t.IsSealed && t.IsPublic)
                    .ToList();
 
     foreach (var fileType in fileTypes)
+    {
       FileHandlers[((FileEntry)Activator.CreateInstance(fileType)).GetExtension()] = fileType;
+    }
   }
 
   public FileExplorerView() {}

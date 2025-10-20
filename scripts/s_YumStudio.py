@@ -37,7 +37,7 @@ except ImportError:
 
 # Fallback dependencies if no requirements.txt exists
 DEFAULT_DEPS = ["requests"]
-
+CREDITS_FILE = "CREDITS.md"
 
 def run_command(cmd: str, cwd: Path | None = None) -> int:
   """Execute a shell command with verbose logging."""
@@ -167,6 +167,14 @@ def GetYumStudio() -> None:
       name = line[0:nameend].strip()
       link = line[nameend+1:].strip()
       deps.append((name, link))
+
+  with open(CREDITS_FILE, "w", encoding="utf-8") as f:
+    f.write("# Credits\n\n")
+    f.write("This project uses the following dependencies (or assets):\n\n")
+    f.write("| Dependency/Asset | Location |\n")
+    f.write("|------------|--------|\n")
+    for name, link in deps:
+      f.write(f"| {name} | [{link}]({link}) |\n")
 
   with open(".gitmodules", "+a") as gsubmds:
     gsubmds.write('')
