@@ -12,6 +12,30 @@ public partial class EditorViewport : Control
 
   public EditorViewport(string path) { ProjectPath = path; }
   public EditorViewport() { }
+
+  public virtual void Destroy()
+  {
+    foreach (var child in GetChildren()) child.QueueFree();
+  }
+
+  public override void _ExitTree() => Destroy();
+}
+
+public partial class DisposableInterface : Control
+{
+  public virtual void Mount() { }
+  public virtual void Unmount() { }
+
+  public void Destroy()
+  {
+    foreach (var child in GetChildren()) child.QueueFree();
+  }
+
+  public override void _ExitTree()
+  {
+    Unmount();
+    Destroy();
+  }
 }
 
 public partial class ProjectEditorView : Control
@@ -33,9 +57,9 @@ public partial class ProjectEditorView : Control
     viewports.AnchorTop = 0.059f;
     viewports.AnchorRight = 1f;
     viewports.AnchorBottom = 1f;
+    GD.Print(viewports.Size);
   }
 
-  // Path SHOULD be the file. Then, projectPath is "deduced"
   public void Open(string path)
   {
     Output.Info($"Opening editor at {path}");
@@ -53,7 +77,6 @@ public partial class ProjectEditorView : Control
     {
       var instance = (EditorViewport)Activator.CreateInstance(type, [projectPath]);
       viewports.AddChild(instance);
-      Output.Info($"Editor viewport loaded: {type.FullName}");
     }
   }
 
@@ -68,6 +91,7 @@ public partial class ProjectEditorView : Control
     win.Connect("close_requested", Callable.From(win.QueueFree));
 
     var editor = new ProjectEditorView();
+    editor.SetAnchorsPreset(LayoutPreset.FullRect);
     editor.Open(projpath);
     win.AddChild(editor);
 

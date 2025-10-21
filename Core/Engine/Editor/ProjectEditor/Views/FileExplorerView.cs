@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Godot;
 using YumStudio.Core.Engine.Cycles;
-using YumStudio.Core.Engine.EngineIO;
 
 namespace YumStudio.Core.Engine.Editor.ProjectEditor.Views;
 
@@ -12,50 +11,89 @@ namespace YumStudio.Core.Engine.Editor.ProjectEditor.Views;
 public partial class FileExplorerView : EditorViewport
 {
 #region inner classes
-  public partial class FileEntry : TextureButton
+  public partial class FileEntry : DisposableInterface
   {
-    public string Path { get; private set; }
+    public string FilePath { get; private set; }
+    protected TextureButton button = new();
+    protected Label name = new();
+    protected VBoxContainer itemBox = new(); 
+
     public virtual string GetExtension() { return ""; }
 
     protected virtual void OnButtonPressed() { }
 
-    private void Init()
+    protected virtual void Init()
     {
-      Connect("pressed", new Callable(this, nameof(OnButtonPressed)));
+      button.TextureNormal = ResourceLoader.Load<Texture2D>("res://assets/icons/documents/empty-page.svg");
     }
 
-    public FileEntry(string path) { Path = path; Init(); }
-    public FileEntry() { Init(); }
+    private void SelfInit()
+    {
+      AddChild(itemBox);
+      itemBox.SetAnchorsPreset(LayoutPreset.FullRect);
+      itemBox.AddChild(button);
+      itemBox.AddChild(name);
+      name.Text = Path.GetFileName(FilePath);
+      button.Connect("pressed", new(this, nameof(OnButtonPressed)));
+      button.CustomMinimumSize = new(100, 100);
+      button.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+      button.SizeFlagsVertical = SizeFlags.ExpandFill;
+      CustomMinimumSize = new(Math.Max(100, name.Size.X), 100);
+      Init();
+    }
+
+    public FileEntry(string path) { FilePath = path; SelfInit(); }
+    public FileEntry() { SelfInit(); }
   }
 
-  public partial class DirectoryEntry : TextureButton
+  public partial class DirectoryEntry : DisposableInterface
   {
-    public string Path { get; protected set; }
+    public string FolderPath { get; protected set; }
     protected FileExplorerView view;
+    protected TextureButton button = new();
+    protected Label name = new();
+    protected VBoxContainer itemBox = new(); 
 
     protected virtual void OnButtonPressed()
-     => view.Open(Path);
-    
+     => view.Open(FolderPath);
 
-    private void Init()
-     => Connect("pressed", new Callable(this, nameof(OnButtonPressed)));
+
+    protected virtual void Init()
+    {
+      button.TextureNormal = ResourceLoader.Load<Texture2D>("res://assets/icons/documents/folder.svg");
+    }
+
+    private void SelfInit()
+    {
+      AddChild(itemBox);
+      itemBox.SetAnchorsPreset(LayoutPreset.FullRect);
+      itemBox.AddChild(button);
+      itemBox.AddChild(name);
+      name.Text = Path.GetFileName(FolderPath);
+      button.Connect("pressed", new(this, nameof(OnButtonPressed)));
+      button.CustomMinimumSize = new(100, 100);
+      button.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+      button.SizeFlagsVertical = SizeFlags.ExpandFill;
+      CustomMinimumSize = new(Math.Max(100, name.Size.X), 100);
+      Init();
+    }
     
     public DirectoryEntry(FileExplorerView explorerView, string path)
     {
       view = explorerView;
-      Path = path;
-      Init();
+      FolderPath = path;
+      SelfInit();
     }
     
-    public DirectoryEntry() { Init(); }
+    public DirectoryEntry() { SelfInit(); }
   }
 
   public partial class ParentDirectoryEntry : DirectoryEntry
   {
     protected override void OnButtonPressed()
-     => view.Open(Directory.GetParent(Path).FullName);
+     => view.Open(Directory.GetParent(FolderPath).FullName);
 
-    public ParentDirectoryEntry(FileExplorerView v, string path) { Path = path; view = v; }
+    public ParentDirectoryEntry(FileExplorerView v, string path) { FolderPath = path; view = v; }
   }
 #endregion
 
@@ -68,7 +106,6 @@ public partial class FileExplorerView : EditorViewport
   private void AddFile(string path)
   {
     var type = FileHandlers.GetValueOrDefault(Path.GetExtension(path), typeof(FileEntry));
-    Output.Info(type.FullName);
     container.AddChild((FileEntry)Activator.CreateInstance(type, [path]));
   }
 
@@ -79,10 +116,17 @@ public partial class FileExplorerView : EditorViewport
     var dirs = Directory.GetDirectories(ProjectPath);
     var files = Directory.GetFiles(ProjectPath);
 
-    AddChild(new ParentDirectoryEntry(this, ProjectPath));
+    container.AddChild(new ParentDirectoryEntry(this, ProjectPath));
 
+    foreach (var dir in dirs)
+    {
+      var dirUI = new DirectoryEntry(this, dir)
+      {
+        CustomMinimumSize = new(100, 100)
+      };
+      container.AddChild(dirUI);
+    }
     foreach (var file in files) AddFile(file);
-    foreach (var dir in dirs) AddChild(new DirectoryEntry(this, dir));
   }
 
   public override void _Ready()
@@ -92,10 +136,11 @@ public partial class FileExplorerView : EditorViewport
     container.SizeFlagsHorizontal = SizeFlags.ExpandFill;
     container.SizeFlagsVertical = SizeFlags.ExpandFill;
     container.Columns = 8;
-
     AddChild(scroll);
     scroll.AddChild(container);
     RenderDirectory();
+    scroll.SetAnchorsPreset(LayoutPreset.FullRect);
+    container.SetAnchorsPreset(LayoutPreset.FullRect);
   }
 
   public void Open(string path)
@@ -113,7 +158,9 @@ public partial class FileExplorerView : EditorViewport
 
     foreach (var fileType in fileTypes)
     {
-      FileHandlers[((FileEntry)Activator.CreateInstance(fileType)).GetExtension()] = fileType;
+      var ext = (FileEntry)Activator.CreateInstance(fileType);
+      FileHandlers[ext.GetExtension()] = fileType;
+      ext.QueueFree();
     }
   }
 

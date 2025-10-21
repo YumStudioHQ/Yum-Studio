@@ -23,6 +23,7 @@
 - [ ] Load Assemblies and also add them together
 - [ ] ProjectEditorView API (Toolbar + Window + Maybe more (other UI panels))
 - [ ] Add file names + texture + ...
+- [ ] Typed containers
 
 ## Assembly
 - [ ] Implement cross-language assembly glue (Lua ↔ C++ ↔ C#)
