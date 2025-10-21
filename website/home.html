@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://yumstudiohq.github.io/YumStudioHQ/assets/style/yum-style.css"
+    />
+    <title>YumStudio — Home</title>
+  </head>
+  <body>
+    <header>
+      <h1>YumStudio — Astral Pulse</h1>
+      <p>Building worlds with Godot and cosmic creativity.</p>
+      <a href="#downloads" class="btn">Explore</a>
+    </header>
+
+    <section id="devs">
+      <h2>Our Team</h2>
+      <div id="devs-container" class="devs-container"></div>
+    </section>
+
+    <section id="downloads">
+      <h2>Downloads</h2>
+      <div class="downloads-container">
+        <div class="download-card">
+          <h3>YumStudio — Astral Pulse</h3>
+          <h4>Working on!</h4>
+        </div>
+        <div class="download-card">
+          <h3>YumStudio — Source code</h3>
+          <a href="http://github.com/YumStudioHQ/Yum-Studio">Get it there!</a>
+        </div>
+        <div class="download-card">
+          <h3>YumStudio — ysdev tool</h3>
+          <p>YumStudio's developers' tool</p>
+          <a href="https://github.com/YumStudioHQ/Yum-Studio/releases/latest">YumStudioDevs</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2025 YumStudio — powered by Godot and much more.</p>
+    </footer>
+
+    <script>
+      fetch("./devs.json")
+      .then(r => r.json())
+      .then(json => {
+        json.forEach(element => {
+          const container = document.getElementById("devs-container");
+          container.innerHTML += `
+            <div class="dev-card">
+              <img src="${element["github"]}.png" alt="Yum">
+              </br><h3><a href="${element["github"]}">${element["name"]}</a></h3></br>
+              ${(element["tags"] || []).map(tag => `<span class="badge">${tag}</span>`).join('')}
+            </div>
+          `;
+        });
+      });
+    </script>
+  </body>
+</html>

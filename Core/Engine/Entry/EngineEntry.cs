@@ -13,7 +13,8 @@ public partial class EngineEntry : Node
         string methodName,
         BindingFlags bindings,
         Type restrict = null,
-        Action<Type, object> onInstanceCreated = null) where TAttribute : Attribute
+        Action<Type, object> onInstanceCreated = null,
+        Action<object> free = null) where TAttribute : Attribute
   {
     var types = YumStudioEngine.GetEngineAssembly()
         .Where(t => t.GetCustomAttribute<TAttribute>() != null)
@@ -33,6 +34,7 @@ public partial class EngineEntry : Node
         {
           type.GetMethod(methodName, bindings)
               ?.Invoke(instance, null);
+          free?.Invoke(instance);
         }
         catch (Exception)
         {
