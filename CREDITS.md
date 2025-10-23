@@ -13,3 +13,8 @@ This project uses the following dependencies (or assets):
 	- [readme](API/RuntimeAPI/cxx/native/warden/README.md)
 - YumStudio-Object from [YumStudioHQ](https://github.com/YumStudioHQ) installed at API/YSObject.
 	- [readme](API/YSObject/README.md)
+
+# Fonts
+- font [Audiowide](licenses/Audiowide/LICENSE.md)
+
+And of course, thanks a *lot* to the Godot project! <3

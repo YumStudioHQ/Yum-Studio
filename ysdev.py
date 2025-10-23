@@ -180,6 +180,8 @@ def copy_repo_contents():
     else:
       shutil.copy2(item, dest)
 
+  shutil.rmtree("Yum-Studio")
+
   print(f"{Ansi.BRIGHT_GREEN}{ME}: Files copied successfully!{Ansi.RESET}")
   return True
 
@@ -192,7 +194,6 @@ def pull_repo():
 
 
   return True
-
 
 # ------------------------------------------------
 # Commands

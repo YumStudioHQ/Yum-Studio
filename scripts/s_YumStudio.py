@@ -170,6 +170,26 @@ def generate_inner_doc(dir: Path, name: str, author: str) -> None:
   except:
     print(f'{Ansi.RED}FAIL{Ansi.RESET}')
 
+def include_font_credits():
+  print(f'{Ansi.YELLOW}[DOC]{Ansi.RESET}: Generating credits for fonts: ', end="")
+
+  try:  
+    with open('.ys-assets', 'r') as ys:
+      with open(CREDITS_FILE, "a") as out:
+        out.write('\n# Fonts\n')
+        for line in ys.readlines():
+          line = line.strip()
+          if line.startswith('font:'):
+            beg = line.find('font:') + len('font:')
+            parts = line[beg:].strip().split('@')
+            if len(parts) > 1:
+              out.write(f'- font [{parts[0].strip()}]({parts[1].strip()})\n')
+      out.close()
+      ys.close()
+    print(f'{Ansi.GREEN}DONE{Ansi.RESET}')
+  except:
+    print(f'{Ansi.RED}FAIL{Ansi.RESET}')
+
 def get_submodules(repo_dir: Path) -> list[Path]:
   """Extract submodule paths from .gitmodules."""
   submodules: list[Path] = []
@@ -186,6 +206,16 @@ def get_submodules(repo_dir: Path) -> list[Path]:
       submodules.append(sub_path)
 
   return submodules
+
+def gen_docs():
+  pass # well...
+
+def gen_lisences():
+  include_font_credits()
+  
+  with open(CREDITS_FILE, "a") as thankYouGodot:
+    thankYouGodot.write(f'\nAnd of course, thanks a *lot* to the Godot project! <3\n')
+    thankYouGodot.close()
 
 def GetYumStudio() -> None:
   """Main entry point of the program."""
@@ -237,10 +267,16 @@ def GetYumStudio() -> None:
 
     print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.CYAN} Dependency {repo_name} resolved{Ansi.RESET}")
 
+
   print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules processed successfully.")
   print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Updating installed packages')
   run_command("git submodule foreach git pull origin main")
   print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules updated.")
+
+  print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Generating docs and lisences')
+  gen_docs()
+  gen_lisences()
+
   print(f'Sum up:')
   for repo_url, repo_name in deps:
     print(f'- {repo_name} ({Ansi.CYAN}{repo_url}{Ansi.RESET})')
