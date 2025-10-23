@@ -1,5 +1,5 @@
 https://github.com/YumStudioHQ/Yum4Godot.git        @ API/YumStudioSharp
-https://github.com/wys-prog/maw.git                 @ API/cxx/maw
-https://github.com/wys-prog/wyfs.git                @ API/cxx/native/wyfs
-https://github.com/wys-prog/warden.git              @ API/cxx/native/warden
+https://github.com/wys-prog/maw.git                 @ API/RuntimeAPI/cxx/maw
+https://github.com/wys-prog/wyfs.git                @ API/RuntimeAPI/cxx/native/wyfs
+https://github.com/wys-prog/warden.git              @ API/RuntimeAPI/cxx/native/warden
 https://github.com/YumStudioHQ/YumStudio-Object.git @ API/YSObject/

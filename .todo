@@ -40,6 +40,9 @@
 - [ ] Add local Git update integration for YumStudioDevelopers
 - [ ] Review/clarify remaining vague items
 
+## Website
+- [ ] Add lisences
+
 ## Not really important
 - [ ] Install Godot/.NET/GCC regarding the platform with ysdev
 

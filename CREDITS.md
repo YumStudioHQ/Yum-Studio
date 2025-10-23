@@ -1,11 +1,15 @@
-# Credits — [YumStudio](./README.md)
+# Credits
 
-This project uses the following dependencies:
+This project uses the following dependencies (or assets):
 
-| Dependency | Source |
-|------------|--------|
-| https://github.com/YumStudioHQ/Yum4Godot.git | [API/YumStudioSharp](API/YumStudioSharp) |
-| https://github.com/wys-prog/maw.git | [API/cxx/maw](API/cxx/maw) |
-| https://github.com/wys-prog/wyfs.git | [API/cxx/native/wyfs](API/cxx/native/wyfs) |
-| https://github.com/wys-prog/warden.git | [API/cxx/native/warden](API/cxx/native/warden) |
-| https://github.com/YumStudioHQ/YumStudio-Object.git | [API/YSObject/](API/YSObject/) |
+- Yum4Godot from [YumStudioHQ](https://github.com/YumStudioHQ) installed at API/YumStudioSharp.
+	- [license](API/YumStudioSharp/LICENSE.md)
+	- [readme](API/YumStudioSharp/README.md)
+- maw from [wys-prog](https://github.com/wys-prog) installed at API/RuntimeAPI/cxx/maw.
+	- [readme](API/RuntimeAPI/cxx/maw/README.md)
+- wyfs from [wys-prog](https://github.com/wys-prog) installed at API/RuntimeAPI/cxx/native/wyfs.
+	- [readme](API/RuntimeAPI/cxx/native/wyfs/README.md)
+- warden from [wys-prog](https://github.com/wys-prog) installed at API/RuntimeAPI/cxx/native/warden.
+	- [readme](API/RuntimeAPI/cxx/native/warden/README.md)
+- YumStudio-Object from [YumStudioHQ](https://github.com/YumStudioHQ) installed at API/YSObject.
+	- [readme](API/YSObject/README.md)

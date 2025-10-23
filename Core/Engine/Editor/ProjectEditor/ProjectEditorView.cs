@@ -21,23 +21,6 @@ public partial class EditorViewport : Control
   public override void _ExitTree() => Destroy();
 }
 
-public partial class DisposableInterface : Control
-{
-  public virtual void Mount() { }
-  public virtual void Unmount() { }
-
-  public void Destroy()
-  {
-    foreach (var child in GetChildren()) child.QueueFree();
-  }
-
-  public override void _ExitTree()
-  {
-    Unmount();
-    Destroy();
-  }
-}
-
 public partial class ProjectEditorView : Control
 {
   private string projectPath = ""; // Path to the project
@@ -57,7 +40,6 @@ public partial class ProjectEditorView : Control
     viewports.AnchorTop = 0.059f;
     viewports.AnchorRight = 1f;
     viewports.AnchorBottom = 1f;
-    GD.Print(viewports.Size);
   }
 
   public void Open(string path)

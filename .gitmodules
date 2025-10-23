@@ -1,14 +1,14 @@
 [submodule "API/YumStudioSharp"]
 	path = API/YumStudioSharp
 	url = https://github.com/YumStudioHQ/Yum4Godot.git
-[submodule "API/cxx/maw"]
-	path = API/cxx/maw
+[submodule "API/RuntimeAPI/cxx/maw"]
+	path = API/RuntimeAPI/cxx/maw
 	url = https://github.com/wys-prog/maw.git
-[submodule "API/cxx/native/wyfs"]
-	path = API/cxx/native/wyfs
+[submodule "API/RuntimeAPI/cxx/native/wyfs"]
+	path = API/RuntimeAPI/cxx/native/wyfs
 	url = https://github.com/wys-prog/wyfs.git
-[submodule "API/cxx/native/warden"]
-	path = API/cxx/native/warden
+[submodule "API/RuntimeAPI/cxx/native/warden"]
+	path = API/RuntimeAPI/cxx/native/warden
 	url = https://github.com/wys-prog/warden.git
 [submodule "API/YSObject"]
 	path = API/YSObject

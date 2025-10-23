@@ -27,6 +27,7 @@ from pathlib import Path
 import shutil
 import configparser
 import re
+import os
 
 try:
   import scripts.specsV2 as specs
@@ -49,6 +50,23 @@ def run_command(cmd: str, cwd: Path | None = None) -> int:
     print(f"{Ansi.RED}[ERR]{Ansi.RESET} Command failed: {cmd}")
     return e.returncode
 
+def get_infos_of_git(url: str) -> tuple[str, str, str]:
+    clean = url.replace(":", "/").rstrip("/")
+    parts = clean.split("/")
+
+    repo_name = os.path.splitext(parts[-1])[0]  # 'repo'
+    author = parts[-2]                          # 'author' or 'org'
+
+    # Try to infer the domain (GitHub, GitLab, etc.)
+    domain = "github.com"
+    for known in ("github.com", "gitlab.com", "bitbucket.org"):
+        if known in url:
+            domain = known
+            break
+
+    author_profile = f"https://{domain}/{author}"
+
+    return repo_name, author, author_profile
 
 def run_python_script(python_exec: Path, script: str) -> None:
   """Run a Python script, auto-installing missing dependencies if needed."""
@@ -130,11 +148,27 @@ def process_repo(repo_dir: Path) -> None:
   else:
     for script in scripts:
       run_python_script(python_exec, script)
-
+      
   # Cleanup
   cleanup_repo(repo_dir)
   print(specs.pretty_specs(f'{repo_dir}', f'{Ansi.CYAN}[SpecsV2]: {Ansi.RESET}'))
 
+def generate_inner_doc(dir: Path, name: str, author: str) -> None:
+  print(f'{Ansi.YELLOW}[DOC]{Ansi.RESET}: Generating documentation for {str(dir.absolute())}: ', end="")
+  repo_license = dir / "LICENSE.md"
+  repo_readme = dir / "README.md"
+
+  try:
+    with open(CREDITS_FILE, "a") as credit_file:
+      credit_file.write(
+        f'- {name} from {author} installed at {dir}.\n' +
+        (f'\t- [license]({repo_license})\n' if repo_license.exists() else '') +
+        (f'\t- [readme]({repo_readme})\n' if repo_readme.exists() > 0 else '')
+      )
+      credit_file.close()
+    print(f'{Ansi.GREEN}DONE{Ansi.RESET}')
+  except:
+    print(f'{Ansi.RED}FAIL{Ansi.RESET}')
 
 def get_submodules(repo_dir: Path) -> list[Path]:
   """Extract submodule paths from .gitmodules."""
@@ -171,10 +205,6 @@ def GetYumStudio() -> None:
   with open(CREDITS_FILE, "w", encoding="utf-8") as f:
     f.write("# Credits\n\n")
     f.write("This project uses the following dependencies (or assets):\n\n")
-    f.write("| Dependency/Asset | Location |\n")
-    f.write("|------------|--------|\n")
-    for name, link in deps:
-      f.write(f"| {name} | [{link}]({link}) |\n")
 
   with open(".gitmodules", "+a") as gsubmds:
     gsubmds.write('')
@@ -192,7 +222,10 @@ def GetYumStudio() -> None:
     run_command("git submodule sync --recursive")
     run_command("git submodule update --init --recursive")
     process_repo(repo_dir)
-
+    
+    git_name, author, profile = get_infos_of_git(repo_url)
+    generate_inner_doc(repo_dir, git_name, f'[{author}]({profile})')
+    
     submodules = get_submodules(repo_dir)
     if not submodules:
       print(f"{Ansi.YELLOW}[INFO]{Ansi.RESET} No submodules found.")
