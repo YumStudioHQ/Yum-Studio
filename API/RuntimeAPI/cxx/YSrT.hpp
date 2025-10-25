@@ -1,6 +1,3 @@
-#pragma once
+#pragma once 
 
-namespace YumStudio::V1 {
-  
-
-}
+#include "ysrt-base.hpp"
