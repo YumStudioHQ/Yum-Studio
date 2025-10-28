@@ -1,10 +1,12 @@
 # Todo
 
 ## Uncategorized
-- [ ] Liscences
+- [X] Liscences
 - [ ] 3D-Simple Mesh Editor
 - [ ] Implement user-defined/APIs/.../ EditorViewports dynamically from an Assembly?
 - [ ] Editor API
+- [ ] Internall ABI for big types (raw bytes + known cast)
+- [ ] C++/Lua/C# API multi-threading support?
 
 ## Next / High Priority
 - [ ] Enable HTTPS support
@@ -12,6 +14,7 @@
 - [ ] Add encryption and key-management for YSO
 - [ ] Implement Maw.Lua assembly and loader
 - [ ] Implement C# assembly toolchain (compiler, runtime attributes)
+- [ ] Add C++ and C even functions. (Reflection for C++?)
 
 ## Editor
 - [X] Implement Project Editor

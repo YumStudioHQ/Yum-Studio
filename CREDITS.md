@@ -8,8 +8,10 @@ This project uses the following dependencies (or assets):
 - maw from [wys-prog](https://github.com/wys-prog) installed at API/RuntimeAPI/cxx/maw.
 	- [readme](API/RuntimeAPI/cxx/maw/README.md)
 - wyfs from [wys-prog](https://github.com/wys-prog) installed at API/RuntimeAPI/cxx/native/wyfs.
+	- [license](API/RuntimeAPI/cxx/native/wyfs/LICENSE.md)
 	- [readme](API/RuntimeAPI/cxx/native/wyfs/README.md)
 - warden from [wys-prog](https://github.com/wys-prog) installed at API/RuntimeAPI/cxx/native/warden.
+	- [license](API/RuntimeAPI/cxx/native/warden/LICENSE.md)
 	- [readme](API/RuntimeAPI/cxx/native/warden/README.md)
 - YumStudio-Object from [YumStudioHQ](https://github.com/YumStudioHQ) installed at API/YSObject.
 	- [readme](API/YSObject/README.md)

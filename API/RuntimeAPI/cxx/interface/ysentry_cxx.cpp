@@ -1,16 +1,18 @@
-#pragma once
-
-/* YumStudio
- * YSrT -- YumStudio Runtime
+/** @file ysentry_cxx.cpp
+ * 
+ * @brief C interface for the C/C++ YumStudio API.
  * 
  * This file is a part of the YumStudio Meta Engine Project.
  * This file is provided "as is," without warranty of any kind.
  * You may NOT sell this file without any modification.
+ * 
+ * @author MONOE.
  */
 
-namespace maw { } /* Forward Maw.Reflection's namespace */
-namespace YumStudio {
+#include <cstdint>
 
-  /* Import Maw.Reflection */
-  using namespace maw;
+extern "C" {
+  int32_t ysi_init_cxx_backend() {
+    
+  }
 }
