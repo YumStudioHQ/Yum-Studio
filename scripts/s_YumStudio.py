@@ -217,7 +217,7 @@ def gen_lisences():
     thankYouGodot.write(f'\nAnd of course, thanks a *lot* to the Godot project! <3\n')
     thankYouGodot.close()
 
-def GetYumStudio() -> None:
+def get_YumStudio():
   """Main entry point of the program."""
   deps: list[tuple[str, str]] = [
 
@@ -282,7 +282,7 @@ def GetYumStudio() -> None:
     print(f'- {repo_name} ({Ansi.CYAN}{repo_url}{Ansi.RESET})')
 
 def main():
-  GetYumStudio()
+  get_YumStudio()
   print(f'Specs:\n{specs.pretty_specs(".", f'{Ansi.CYAN}[SpecsV2]: {Ansi.RESET}')}')
 
 if __name__ == "__main__":

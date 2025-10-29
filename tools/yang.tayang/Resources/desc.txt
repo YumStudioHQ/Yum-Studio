@@ -1,0 +1,1 @@
+This script is a lightweight build automation tool that reads a configuration file to run commands, compile files, download resources, and manage conditional tasks based on user-defined variables.
