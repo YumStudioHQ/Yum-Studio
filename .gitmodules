@@ -18,3 +18,7 @@
 	path = API/YSObject
 	url = https://github.com/YumStudioHQ/YumStudio-Object.git
 	branch = main
+[submodule "GodotC++"]
+	path = GodotC++
+	url = https://github.com/godotengine/godot-cpp
+	branch = 4.5
