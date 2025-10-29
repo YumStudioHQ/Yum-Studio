@@ -40,15 +40,16 @@ For detailed usage, see [ysdev-doc.md](./doc/ysdev-doc.md).
 > My dream is to make Godot truly embrace the C and C++ languages —
 > not just as add-ons, but as first-class citizens.”*
 >
-> — **モノエ / MONOE**, creator of YumStudio
+> — **モノエ / MONOE.**, creator of YumStudio
 
 ---
 
 ## Other
 
-* [License](./LICENSE)
+* [License](./LICENSE.md)
 * [Authors](./AUTHORS.md)
 * [Credits](./CREDITS.md)
+* [Website](https://yumstudiohq.github.io/Yum-Studio/index.html)
 
 ---
 

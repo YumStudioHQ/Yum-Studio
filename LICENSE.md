@@ -35,8 +35,8 @@ under the following terms:
 ---
 
 ## Godot Game Engine (YumStudio's base) 
-- [License](./licenses/godot/LICENSE.md)
-- [Authors](./licenses/godot/AUTHORS.md)
+- [License](./licenses/Godot/LICENSE.md)
+- [Authors](./licenses/Godot/AUTHORS.md)
 
 ## Third-party
 Thanks also to a *lot* of people, that (in)directly helped the project!

@@ -219,18 +219,27 @@ def gen_lisences():
 
 def get_YumStudio():
   """Main entry point of the program."""
-  deps: list[tuple[str, str]] = [
+  deps: list[tuple[str, str, str]] = [
 
   ]
 
   with open(".ys-deps", "r") as ysdeps:
+    linecount = 0
     for line in ysdeps.readlines():
+      linecount += 1
       if line.strip().startswith('#'): continue
       if line.strip() == '': continue
+      if not line.strip().startswith('from') or not '@' in line or not ' in ' in line: 
+        print(f'{Ansi.RED}err: parse error at line {linecount}:{line.strip()} in file .ys-deps{Ansi.RESET}')
+        return
+      
       nameend = line.find('@')
-      name = line[0:nameend].strip()
+      tin = line.find(' in ')
+      branch = line[len('from'):tin].strip()
+      name = line[tin + len(' in '):nameend].strip()
       link = line[nameend+1:].strip()
-      deps.append((name, link))
+      
+      deps.append((name, branch, link))
 
   with open(CREDITS_FILE, "w", encoding="utf-8") as f:
     f.write("# Credits\n\n")
@@ -240,7 +249,7 @@ def get_YumStudio():
     gsubmds.write('')
     gsubmds.close()
 
-  for repo_url, repo_name in deps:
+  for repo_url, branch, repo_name in deps:
     repo_dir = Path(repo_name)
 
     if repo_dir.exists():
@@ -248,7 +257,7 @@ def get_YumStudio():
       shutil.rmtree(repo_dir)
 
     print(f"{Ansi.CYAN}[CLONE]{Ansi.RESET} Cloning repository from {repo_url}")
-    run_command(f"git submodule add -f {repo_url} {repo_name}")
+    run_command(f"git submodule add -f -b {branch} {repo_url} {repo_name}")
     run_command("git submodule sync --recursive")
     run_command("git submodule update --init --recursive")
     process_repo(repo_dir)
@@ -270,7 +279,7 @@ def get_YumStudio():
 
   print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules processed successfully.")
   print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Updating installed packages')
-  run_command("git submodule foreach git pull origin main")
+  run_command("git submodule foreach git pull")
   print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules updated.")
 
   print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Generating docs and lisences')
@@ -278,8 +287,8 @@ def get_YumStudio():
   gen_lisences()
 
   print(f'Sum up:')
-  for repo_url, repo_name in deps:
-    print(f'- {repo_name} ({Ansi.CYAN}{repo_url}{Ansi.RESET})')
+  for repo_url, branch, repo_name in deps:
+    print(f'- {repo_name} (branch {branch}) ({Ansi.CYAN}{repo_url}{Ansi.RESET})')
 
 def main():
   get_YumStudio()

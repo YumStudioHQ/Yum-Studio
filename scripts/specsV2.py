@@ -45,6 +45,7 @@ def specsof(path: str) -> dict[str, int]:
   return lines_per_language
 
 def pretty_specs(path: str, prefix: str = '> ') -> str:
+  try:
     specs = specsof(path)
     items = sorted(specs.items(), key=lambda kv: kv[1], reverse=True)
 
@@ -78,6 +79,8 @@ def pretty_specs(path: str, prefix: str = '> ') -> str:
         )
 
     return s
+  except:
+    return ''
 
 
 
