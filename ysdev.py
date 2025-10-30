@@ -213,10 +213,10 @@ def cmd_install(_args: list[str]) -> int:
     return 1
 
 
-def cmd_update(_args: list[str]) -> int:
+def cmd_update(args: list[str]) -> int:
   try:
     import scripts.s_YumStudio as YS
-    YS.main()
+    YS.main(args)
     return 0 # YS.main() always returns 0
   except ImportError:
     print(f"{Ansi.BRIGHT_RED}{ME}: scripts.s_YumStudio not found. Try 'install'.{Ansi.RESET}")

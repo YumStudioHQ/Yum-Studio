@@ -3,4 +3,5 @@ from main in https://github.com/wys-prog/maw.git                 @ API/RuntimeAP
 from main in https://github.com/wys-prog/wyfs.git                @ API/RuntimeAPI/cxx/native/wyfs
 from main in https://github.com/wys-prog/warden.git              @ API/RuntimeAPI/cxx/native/warden
 from main in https://github.com/YumStudioHQ/YumStudio-Object.git @ API/YSObject/
-from 4.5  in https://github.com/godotengine/godot-cpp            @ GodotC++/
+
+const from 4.5  in https://github.com/godotengine/godot-cpp            @ GodotC++/

@@ -153,7 +153,7 @@ def process_repo(repo_dir: Path) -> None:
   cleanup_repo(repo_dir)
   print(specs.pretty_specs(f'{repo_dir}', f'{Ansi.CYAN}[SpecsV2]: {Ansi.RESET}'))
 
-def generate_inner_doc(dir: Path, name: str, author: str) -> None:
+def generate_inner_doc(link: str, dir: Path, name: str, author: str) -> None:
   print(f'{Ansi.YELLOW}[DOC]{Ansi.RESET}: Generating documentation for {str(dir.absolute())}: ', end="")
   repo_license = dir / "LICENSE.md"
   repo_readme = dir / "README.md"
@@ -161,7 +161,7 @@ def generate_inner_doc(dir: Path, name: str, author: str) -> None:
   try:
     with open(CREDITS_FILE, "a") as credit_file:
       credit_file.write(
-        f'- {name} from {author} installed at {dir}.\n' +
+        f'- [{name}]({link}) from {author} installed at {dir}.\n' +
         (f'\t- [license]({repo_license})\n' if repo_license.exists() else '') +
         (f'\t- [readme]({repo_readme})\n' if repo_readme.exists() > 0 else '')
       )
@@ -207,30 +207,40 @@ def get_submodules(repo_dir: Path) -> list[Path]:
 
   return submodules
 
-def gen_docs():
-  pass # well...
+def gen_credits(dcredits: list[tuple[str, str, str, str, str]]):
+  for repo_url, repo_dir, git_name, author, profile in dcredits:
+    generate_inner_doc(repo_url, Path(repo_dir), git_name, f'[{author}]({profile})')
 
-def gen_lisences():
+def gen_licenses():
   include_font_credits()
   
   with open(CREDITS_FILE, "a") as thankYouGodot:
     thankYouGodot.write(f'\nAnd of course, thanks a *lot* to the Godot project! <3\n')
     thankYouGodot.close()
 
-def get_YumStudio():
-  """Main entry point of the program."""
-  deps: list[tuple[str, str, str]] = [
+def gen_docs(dcredits: list[tuple[str, str, str, str, str]]):
+  print(f'{Ansi.YELLOW}[DOC]{Ansi.RESET}: Generating licenses')
+  gen_licenses()
+  gen_credits(dcredits)
 
-  ]
+def get_YumStudio(enable_const: bool = False, doc_only: bool = False):
+  """Main entry point of the program."""
+  deps: list[tuple[str, str, str]] = []
+  credit_list: list[tuple[str, str, str, str, str]] = []
 
   with open(".ys-deps", "r") as ysdeps:
     linecount = 0
     for line in ysdeps.readlines():
       linecount += 1
-      if line.strip().startswith('#'): continue
-      if line.strip() == '': continue
-      if not line.strip().startswith('from') or not '@' in line or not ' in ' in line: 
-        print(f'{Ansi.RED}err: parse error at line {linecount}:{line.strip()} in file .ys-deps{Ansi.RESET}')
+      line = line.strip()
+      if line.startswith('#'): continue
+      elif line == '': continue
+      elif line.startswith('const '):
+        if enable_const: line = line[len('const ')]
+        else: continue
+      
+      if not line.startswith('from') or not '@' in line or not ' in ' in line: 
+        print(f'{Ansi.RED}err: parse error at line {linecount}:{line} in file .ys-deps{Ansi.RESET}')
         return
       
       nameend = line.find('@')
@@ -252,47 +262,52 @@ def get_YumStudio():
   for repo_url, branch, repo_name in deps:
     repo_dir = Path(repo_name)
 
-    if repo_dir.exists():
-      print(f"{Ansi.YELLOW}[INFO]{Ansi.RESET} Removing existing repository at {repo_dir}")
-      shutil.rmtree(repo_dir)
+    if not doc_only:
+      if repo_dir.exists():
+        print(f"{Ansi.YELLOW}[INFO]{Ansi.RESET} Removing existing repository at {repo_dir}")
+        shutil.rmtree(repo_dir)
 
-    print(f"{Ansi.CYAN}[CLONE]{Ansi.RESET} Cloning repository from {repo_url}")
-    run_command(f"git submodule add -f -b {branch} {repo_url} {repo_name}")
-    run_command("git submodule sync --recursive")
-    run_command("git submodule update --init --recursive")
-    process_repo(repo_dir)
+      print(f"{Ansi.CYAN}[CLONE]{Ansi.RESET} Cloning repository from {repo_url}")
+      run_command(f"git submodule add -f -b {branch} {repo_url} {repo_name}")
+      run_command("git submodule sync --recursive")
+      run_command("git submodule update --init --recursive")
+      process_repo(repo_dir)
+
+      submodules = get_submodules(repo_dir)
+      if not submodules:
+        print(f"{Ansi.YELLOW}[INFO]{Ansi.RESET} No submodules found.")
+      else:
+        print(f"{Ansi.BOLD}{Ansi.CYAN}[PROC]{Ansi.RESET} Found {len(submodules)} submodule(s).")
+        for sub in submodules:
+          print(f"{Ansi.BOLD}{Ansi.CYAN}[SUBM]{Ansi.RESET} Processing submodule: {sub}")
+          process_repo(sub)
+
+      print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.CYAN} Dependency {repo_name} resolved{Ansi.RESET}")
     
-    git_name, author, profile = get_infos_of_git(repo_url)
-    generate_inner_doc(repo_dir, git_name, f'[{author}]({profile})')
+    credit_list.append((repo_url, str(repo_dir), *get_infos_of_git(repo_url)))
+  
+  if not doc_only:  
+    print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules processed successfully.")
+    print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Updating installed packages')
+    run_command("git submodule foreach git pull")
+    print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules updated.")
+
+    print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Generating docs and licenses')
+
+  gen_docs(credit_list)
+  
+  if not doc_only:
+    print(f'Sum up:')
+    for repo_url, branch, repo_name in deps:
+      print(f'- {repo_name} (branch {branch}) ({Ansi.CYAN}{repo_url}{Ansi.RESET})')
     
-    submodules = get_submodules(repo_dir)
-    if not submodules:
-      print(f"{Ansi.YELLOW}[INFO]{Ansi.RESET} No submodules found.")
-    else:
-      print(f"{Ansi.BOLD}{Ansi.CYAN}[PROC]{Ansi.RESET} Found {len(submodules)} submodule(s).")
-      for sub in submodules:
-        print(f"{Ansi.BOLD}{Ansi.CYAN}[SUBM]{Ansi.RESET} Processing submodule: {sub}")
-        process_repo(sub)
+    print(f'Specs:\n{specs.pretty_specs(".", f'{Ansi.CYAN}[SpecsV2]: {Ansi.RESET}')}')
 
-    print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.CYAN} Dependency {repo_name} resolved{Ansi.RESET}")
-
-
-  print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules processed successfully.")
-  print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Updating installed packages')
-  run_command("git submodule foreach git pull")
-  print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.RESET} All repositories and submodules updated.")
-
-  print(f'{Ansi.YELLOW}[INFO]{Ansi.RESET} Generating docs and lisences')
-  gen_docs()
-  gen_lisences()
-
-  print(f'Sum up:')
-  for repo_url, branch, repo_name in deps:
-    print(f'- {repo_name} (branch {branch}) ({Ansi.CYAN}{repo_url}{Ansi.RESET})')
-
-def main():
-  get_YumStudio()
-  print(f'Specs:\n{specs.pretty_specs(".", f'{Ansi.CYAN}[SpecsV2]: {Ansi.RESET}')}')
+def main(argv: list[str]):
+  get_YumStudio(
+    '-const' in argv,
+    '-doc-only' in argv
+  )
 
 if __name__ == "__main__":
-  main()
+  main(sys.argv)
