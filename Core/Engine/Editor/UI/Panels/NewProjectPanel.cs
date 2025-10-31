@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.IO;
 
 namespace YumStudio.Core.Engine.Editor.UI.Panels;

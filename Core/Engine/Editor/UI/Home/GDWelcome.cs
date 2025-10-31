@@ -1,5 +1,4 @@
 using Godot;
-using YumStudio.Core.Engine.Editor.ProjectEditor;
 using YumStudio.Core.Engine.Cycles;
 using YumStudio.Core.Engine.Editor.Projects;
 using YumStudio.Core.Engine.Editor.UI.Panels;
@@ -31,7 +30,7 @@ public partial class GDWelcome : Control
     // TODO: Errors?
     ProjectManager.CreateProject(node.ProjectName(), node.ProjectPath()).Fire();
     newProjectWindow.Visible = false;
-    AddChild(ProjectEditorView.NewProjectEditor(node.ProjectName(), node.ProjectPath()));
+    // TODO: Open the project
   }
 }
 

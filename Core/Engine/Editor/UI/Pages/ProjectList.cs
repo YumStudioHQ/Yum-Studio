@@ -1,7 +1,5 @@
-using System;
 using Godot;
 using YumStudio.Core.Engine.Cycles;
-using YumStudio.Core.Engine.Editor.ProjectEditor;
 using YumStudio.Core.Engine.Editor.Projects;
 
 namespace YumStudio.Core.Engine.Editor.UI.Pages;
@@ -34,8 +32,7 @@ public partial class ProjectList : Control
     button.Connect("pressed", Callable.From(() =>
     {
       // TODO: already loaded windows
-      var win = ProjectEditorView.NewProjectEditor(project.Name, project.Path);
-      AddChild(win);
+
     }));
     projectsBox.AddChild(panel);
   }

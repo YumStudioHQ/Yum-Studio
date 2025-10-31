@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using YumStudio.Core.Engine.Editor.Modules.Resources;
 using YumStudio.Core.Engine.EngineIO;
 using YumStudio.Core.UnderlyingSystem;
 
@@ -8,7 +9,13 @@ namespace YumStudio.Core.Engine.Editor.Projects;
 
 public static class ProjectManager
 {
-  private static readonly List<string> ApiFileDirectories = [];
+  private static readonly List<string> ApiFileDirectories = [
+    ResourcesManager.RELATIVE_INTERNAL,
+    ResourcesManager.RELATIVE_IMPORT,
+    ResourcesManager.RELATIVE_NODES,
+    ResourcesManager.RELATIVE_GEN,
+    ResourcesManager.RELATIVE_GENNODE,
+  ];
 
   private static void CopyApi(string path)
   {
