@@ -273,37 +273,47 @@ def cmd_update_upstream(_args: list[str]):
   sys.exit(run(["git", "pull", f'{REPO_URL}', "main"]))
 
 def cmd_force_update(_args: list[str]) -> int:
-    """Completely removes Yum-Studio and reinstalls it fresh from GitHub."""
-    confirm = input(f"{Ansi.BRIGHT_RED}{ME}: This will DELETE Yum-Studio and reinstall it. Continue? (y/N) {Ansi.RESET}")
-    if confirm.lower().strip() != "y":
-        print(f"{Ansi.YELLOW}{ME}: Aborted.{Ansi.RESET}")
-        return 0
+  """Completely removes Yum-Studio and reinstalls it fresh from GitHub."""
+  confirm = input(f"{Ansi.BRIGHT_RED}{ME}: This will DELETE Yum-Studio and reinstall it. Continue? (y/N) {Ansi.RESET}")
+  if confirm.lower().strip() != "y":
+    print(f"{Ansi.YELLOW}{ME}: Aborted.{Ansi.RESET}")
+    return 0
 
-    print(f"{Ansi.BRIGHT_RED}{ME}: Nuking everything...{Ansi.RESET}")
+  print(f"{Ansi.BRIGHT_RED}{ME}: Nuking everything...{Ansi.RESET}")
 
-    if REPO_DIR.exists():
-        shutil.rmtree(REPO_DIR, ignore_errors=True)
-        print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed {REPO_DIR}")
+  if REPO_DIR.exists():
+    shutil.rmtree(REPO_DIR, ignore_errors=True)
+    print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed {REPO_DIR}")
 
-    for path in Path(".").iterdir():
-        if path.name in {".git", "ysdev.py"}:
-            continue
-        if path.is_dir() and path.name.startswith("Yum") or path.name == "scripts":
-            shutil.rmtree(path, ignore_errors=True)
-            print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed dir {path}")
-        elif path.name.startswith("Yum") and path.suffix in {".py", ".md"}:
-            path.unlink(missing_ok=True)
-            print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed file {path}")
+  for path in Path(".").iterdir():
+    if path.name in {".git", "ysdev.py"}:
+      continue
+    if path.is_dir() and path.name.startswith("Yum") or path.name == "scripts":
+      shutil.rmtree(path, ignore_errors=True)
+      print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed dir {path}")
+    elif path.name.startswith("Yum") and path.suffix in {".py", ".md"}:
+      path.unlink(missing_ok=True)
+      print(f"{Ansi.RED}[NUKE]{Ansi.RESET} Removed file {path}")
 
-    print(f"{Ansi.BRIGHT_MAGENTA}{ME}: Reinstalling Yum-Studio from scratch...{Ansi.RESET}")
-    if ensure_repo():
-        copy_repo_contents()
-        print(f"{Ansi.BRIGHT_GREEN}{ME}: Fresh install complete!{Ansi.RESET}")
-        return cmd_update(_args)
-    else:
-        print(f"{Ansi.BRIGHT_RED}{ME}: Force update failed!{Ansi.RESET}")
-        return 1
+  print(f"{Ansi.BRIGHT_MAGENTA}{ME}: Reinstalling Yum-Studio from scratch...{Ansi.RESET}")
+  if ensure_repo():
+    copy_repo_contents()
+    print(f"{Ansi.BRIGHT_GREEN}{ME}: Fresh install complete!{Ansi.RESET}")
+    return cmd_update(_args)
+  else:
+    print(f"{Ansi.BRIGHT_RED}{ME}: Force update failed!{Ansi.RESET}")
+    return 1
 
+def cmd_get_gh(argv: list[str]) -> int:
+  try:
+    import scripts.get_gh as get_gh
+    get_gh.main(argv)
+    return 0
+  except ImportError:
+    print(f"{Ansi.BRIGHT_RED}{ME}: scripts.get_gh not found. Try 'install'.{Ansi.RESET}")
+    return 1
+
+  return 0
 
 # ------------------------------------------------
 # Dispatcher
@@ -348,7 +358,8 @@ def get_builtin_applications() -> dict[str, TayangApp]: return {
   "specs": TayangApp('specs', 'prints informations about the code base', cmd_specs),
   "test": TayangApp('test', 'tests YumStudio using the validations folder', cmd_validate),
   "pull": TayangApp('pull', 'updates YumStudio using the official Git repository. This may remove your changes', cmd_update_upstream),
-  "nuke": TayangApp('nuke', 'forces the update with the official Git repository. Deletes everything.', cmd_force_update)
+  "nuke": TayangApp('nuke', 'forces the update with the official Git repository. Deletes everything.', cmd_force_update),
+  "get-gh": TayangApp('get-gh', 'Download selected assets from a GitHub release (latest or specific tag).', cmd_get_gh)
 }
 
 def load_Tayang_applications(dirs: list[str]) -> dict[str, TayangApp]:
