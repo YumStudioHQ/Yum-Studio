@@ -31,11 +31,9 @@ import os
 
 try:
   import scripts.specsV2 as specs
-  import scripts.get_gh as get_gh
   from scripts.colors import Ansi
 except ImportError:
   import specsV2 as specs
-  import get_gh as get_gh
   from colors import Ansi
 
 # Fallback dependencies if no requirements.txt exists
@@ -284,11 +282,6 @@ def get_YumStudio(enable_const: bool = False, doc_only: bool = False):
           print(f"{Ansi.BOLD}{Ansi.CYAN}[SUBM]{Ansi.RESET} Processing submodule: {sub}")
           process_repo(sub)
 
-      get_gh.main([
-        '-o', 'YumStudioHQ', '-r', 
-        'Yum-Studio', '--tag yum-gdextension-1.0-b4.5', '--needed-extensions .a',
-        '--output', 'libraries/godot/'
-      ])
       print(f"{Ansi.BOLD}{Ansi.GREEN}[DONE]{Ansi.CYAN} Dependency {repo_name} resolved{Ansi.RESET}")
     
     credit_list.append((repo_url, str(repo_dir), *get_infos_of_git(repo_url)))
@@ -315,6 +308,11 @@ def main(argv: list[str]):
     '-const' in argv,
     '-doc-only' in argv
   )
+  
+  try:
+    import get_gh
+    get_gh.main(["-o", "YumStudioHQ", "-r", "Yum-Studio", "--tag", "yum-gdextension-1.0-b4.5", "--needed-extensions", ".a "])
+  except: pass
 
 if __name__ == "__main__":
   main(sys.argv)

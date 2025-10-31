@@ -218,8 +218,8 @@ def cmd_update(args: list[str]) -> int:
     import scripts.s_YumStudio as YS
     YS.main(args)
     return 0 # YS.main() always returns 0
-  except ImportError:
-    print(f"{Ansi.BRIGHT_RED}{ME}: scripts.s_YumStudio not found. Try 'install'.{Ansi.RESET}")
+  except ImportError as e:
+    print(f"{Ansi.BRIGHT_RED}{ME}: scripts.s_YumStudio not found. Try 'install'.{Ansi.RESET}\n{e}")
     return 1
 
 def cmd_build(args: list[str]) -> int:
@@ -312,8 +312,6 @@ def cmd_get_gh(argv: list[str]) -> int:
   except ImportError:
     print(f"{Ansi.BRIGHT_RED}{ME}: scripts.get_gh not found. Try 'install'.{Ansi.RESET}")
     return 1
-
-  return 0
 
 # ------------------------------------------------
 # Dispatcher
